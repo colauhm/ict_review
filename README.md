@@ -56,3 +56,4 @@
      recommendStatus        BOOLEAN DEFAULT NULL,
      viewStatus 		DATETIME DEFAULT NULL
 
+## groom
