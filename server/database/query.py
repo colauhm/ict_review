@@ -11,13 +11,13 @@ import pymysql.cursors
     result = execute_sql_query(query, params)
 '''
 
+
 async def execute_sql_query(query: str, params: tuple = None):
     try:
         connection = pymysql.connect(
-            host="54.180.96.26",
+            host="localhost",
             user="root",
-            port=54548,
-            password="1234",
+            password="tjdwnsals12*",
             db="connection",
             cursorclass=pymysql.cursors.DictCursor)
         with connection.cursor() as cursor:
