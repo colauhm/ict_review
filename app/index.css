@@ -7,6 +7,6 @@ div{
     display: flex;
 }
 
-#logout{
-    display: none;
+.changeStatus {
+    display: block;
 }

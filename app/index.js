@@ -1,4 +1,4 @@
-import { authCheck, ServerUrl, getCookie } from './utils/function.js';
+import { authCheck, ServerUrl, serverSessionCheck, deleteCookie } from './utils/function.js';
 import { BoardItem } from './components/boardItem.js';
 const requestBoardListType = {
     category : 'notice',
@@ -36,11 +36,18 @@ const searchDetailTypebutton = {
     writer : document.getElementById('writerSearchButton')
 }
 
+const statusButton = {
+    login : document.getElementById('login'),
+    signup : document.getElementById('signup'),
+    logout : document.getElementById('logout')
+}
+
 const selectBoardButtons = document.querySelector('.selectBoardButtons');
 const secretQnABoardSelector = document.querySelector('.secretQnABoardSelector');
 const secretTypeButton = document.getElementById('secretTypeButton');
 const secretCheckBox = document.getElementById('secretCheckBox');
-const logoutButton = document.getElementById('logout');
+
+const data = await serverSessionCheck();
 
 //--------------------버튼 선택시 다른 버튼은 선택버튼 활성화 나머지버튼 활성화 기능-----------//
 
@@ -144,9 +151,32 @@ const setBoardItem = async (boardData) => {
 
 //--------------------------------세션 유무에 따라 보이는 버튼 다르게-----------------------------//
 
+function changeStatus(allButtons){
+    Object.values(allButtons).forEach(button => {
+        button.addEventListener('click', () =>{
+            if (button.id == 'logout'){
+                deleteCookie('session');
+                alert('logout 됩니다.')
+                window.location.href = '/';
+            } else {
+                alert(`${button.id} 페이지로 이동합니다.`);
+                window.location.href = `${button.id}.html`;
+            }
+        });
+    });
+}
 
-const myInfo = await authCheck();
 
+function setStatusButton(data){
+    statusButton.login.style.display = data? 'none':'block';
+    statusButton.signup.style.display = data? 'none':'block';
+    statusButton.logout.style.display = data? 'block':'none';
+    document.querySelector('.changeStatus').style.display = 'flex';
+}
+
+
+changeStatus(statusButton);
+setStatusButton(data);
 const boardList = await boardListLoad();
 setBoardItem(boardList);
-document.addEventListener('DOMContentLoaded', setBoardItem(boardList));
+

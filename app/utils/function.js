@@ -34,12 +34,12 @@ export const serverSessionCheck = async () => {
 export const authCheck = async () => {
     const session = getCookie('session');
     if (session === undefined) {
-        location.href = '/login.html';
+        location.href = '/';
         alert('로그인이 필요합니다.');
     }
 
     const data = await serverSessionCheck();
-    //console.log(data);
+    console.log(data);
     if (!data) {
         deleteCookie('session');
        
@@ -53,7 +53,7 @@ export const authCheckReverse = async () => {
     if (session) {
         const data = await serverSessionCheck();
         if (data) {
-            //location.href = '/';
+            location.href = '/';
         }
     }
 };
