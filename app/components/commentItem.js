@@ -1,4 +1,4 @@
-export const commentItem = (date, writer, content) =>{
+export const commentItem = (idx, date, writer, content, info) =>{
     const dateObj = new Date(date);
     const year = dateObj.getFullYear();
     const month = dateObj.getMonth() + 1;
@@ -14,13 +14,29 @@ export const commentItem = (date, writer, content) =>{
 
     // 날짜와 시간을 합쳐서 YYYY-MM-DD hh:mm:ss
     const dateTimeStr = `${dateStr} ${timeStr}`;
-    return`
-    <div class="commentItem">
-        <div class="info">
-            <h2 class="writer">${writer}</h2>
-            <p class="content">${content}</p>
-            <p class="date">${dateTimeStr}</p>
+    if (info.id != writer && info.power == null){
+        return`
+        <div class="commentItem" id=${idx}> 
+            <div class="info">
+                <h2 class="writer">${writer}</h2>
+                <p class="content">${content}</p>
+                <p class="date">${dateTimeStr}</p>
+            </div>
         </div>
-    </div>
-    `;
+        `;
+    } else{
+        return`
+        <div class="commentItem" id=${idx}>
+            <div class="info">
+                <h2 class="writer">${writer}</h2>
+                <p class="content">${content}</p>
+                <p class="date">${dateTimeStr}</p>
+            </div>
+            <div>
+                <button class="edit" name="commentChange" id="${idx}">수정</button>
+                <button class="edit" name="commentDelect" id ="${idx}">삭제</button>
+            </div>
+        </div>
+        `;
+    }    
 };

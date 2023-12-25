@@ -53,3 +53,15 @@ async def getComment(id:int, last:bool):
         return comments[0]
     else:
         return comments
+    
+@router.delete("/comment/{id}")
+async def deleteBoard(id: str, session: Annotated[str, Header()] = None):
+
+    info = await getSessionData(session)
+    # 게시글 삭제 로직
+    res = await execute_sql_query("DELETE FROM comment WHERE idx = %s AND writerId = %s", (id, info.idx,))
+    # print(res)
+    if (res == 0):
+        return 401, {'message': '삭제 권한이 없습니다.'}
+    else:
+        return 200, {'message': '삭제되었습니다.'}
