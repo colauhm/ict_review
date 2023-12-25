@@ -159,7 +159,6 @@ function changeStatus(allButtons){
                 alert('logout 됩니다.')
                 window.location.href = '/';
             } else {
-                alert(`${button.id} 페이지로 이동합니다.`);
                 window.location.href = `${button.id}.html`;
             }
         });
