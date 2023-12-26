@@ -1,9 +1,8 @@
 import { authCheck, ServerUrl, getCookie, getUrlId, serverSessionCheck } from './utils/function.js';
 import { commentItem } from './components/commentItem.js';
 
-const addCommentButton = document.getElementById('addComment');
-const comment = document.getElementById('comment');
 
+const wirteComment = document.querySelector('.writeComment');
 
 const boardCommponent = {
     title: document.getElementById('title'),
@@ -12,13 +11,14 @@ const boardCommponent = {
     createdAt: document.getElementById('createdAt'),
     viewCount: document.getElementById('viewCount'),
     recommendCount: document.getElementById('recommedCount'),
-    commentCount: document.getElementById('commentCount')
 };
 const boardId = getUrlId();
 const data = await getBoard(boardId);
 const boardType = data[0]['type'];
 const myInfo = boardType == 'notice'? await serverSessionCheck():await authCheck();
-console.log(myInfo);
+//console.log(myInfo);
+
+const commentList = await getComment(false);
 
 Object.entries(boardCommponent).forEach(([key, element]) => {
     const detail = data[0][key];
@@ -30,12 +30,6 @@ async function getBoard(id) {
     const data = await components.json();
     return data;
 }
-
-addCommentButton.addEventListener('click', async () => {
-    await addComment();
-    const newCommentList = await getComment(true);
-    addNewComment(newCommentList);
-});
 
 async function addComment(){
     const content = {
@@ -65,7 +59,7 @@ async function getComment(last){
 const setComment = async (commentData) => {
     const commentList = document.querySelector('.commentList');
     if (commentList && commentData) {
-        console.log(commentData);
+        //console.log(commentData);
         commentList.innerHTML = '';
         commentList.innerHTML = commentData
             .map((data) => {
@@ -79,6 +73,7 @@ const addNewComment = (newCommentData) => {
     const commentList = document.querySelector('.commentList');
     const addCommentData = commentItem(newCommentData.idx, newCommentData.createdAt, newCommentData.writerNickname, newCommentData.content, myInfo);
     commentList.insertAdjacentHTML('afterbegin', addCommentData);
+    comment.value = '';
 };
 
 const delectComment = async (commentId) => {
@@ -89,21 +84,47 @@ const delectComment = async (commentId) => {
     console.log(await response.json());
 };
 
-const commentList = await getComment(false);
-
-await setComment(commentList);
 async function getSelectButton(){
     return document.querySelectorAll('.edit');
 }
 
-const selectButton = await getSelectButton();
-Object.values(selectButton).forEach(button => {
-    button.addEventListener('click', function () {
-        const buttonName = button.getAttribute('name');
-        if (buttonName == 'commentDelect'){
-            delectComment(button.id);
-            alert('댓글이 삭제되었습니다.')
-            window.location.href = (`/board.html?id=${boardId}`);
-        }
-    });
-});
+async function showElementCheck(boardType){
+    
+    if (boardType == 'free'){
+        
+        const commentCount = document.querySelector('.commentCount');
+        //console.log(data[0]['commentCount']);
+        commentCount.innerHTML = `댓글 수 ${data[0]['commentCount']}`;
+        wirteComment.innerHTML = `
+            <textarea placeholder="댓글을 작성해주세요!" id="comment"></textarea>
+            <button id="addComment">댓글 작성</button>
+            `
+        const addCommentButton = document.getElementById('addComment');    
+        addCommentButton.addEventListener('click', async () => {
+            await addComment();
+            const newCommentList = await getComment(true);
+            addNewComment(newCommentList);
+        });
+        await setComment(commentList);
+        getSelectButton()
+        .then((selectButton) => {
+            Object.values(selectButton).forEach(button => {
+                button.addEventListener('click', function () {
+                    const buttonName = button.getAttribute('name');
+                    console.log(buttonName);
+                    if (buttonName === 'commentDelect') {
+                        delectComment(button.id);
+                        alert('댓글이 삭제되었습니다.');
+                        window.location.href = `/board.html?id=${boardId}`;
+                    }
+                });
+            });
+
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+
+    }
+}
+await showElementCheck(boardType);

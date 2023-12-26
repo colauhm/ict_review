@@ -113,12 +113,8 @@ async function secretQnAcheck(){
     requestBoardListType.category = secretCheckBox.checked ? 'secretQnA':'QnA';
     //console.log( requestBoardListType.category);
     sortTypebutton.viewSorter.style.display = requestBoardListType.category == 'secretQnA'?'none':'block';
-
-    if (secretCheckBox.checked){
-        const newBoardList = await boardListLoad();
-        setBoardItem(newBoardList);
-    }
-
+    const newBoardList = await boardListLoad();
+    setBoardItem(newBoardList);
 }
 
 //---------------------------------------정렬 선택 부분----------------------------------------//
@@ -150,7 +146,7 @@ const setBoardItem = async (boardData) => {
         boardList.innerHTML = '';
         boardList.innerHTML = boardData
             .map((data) => {
-                return BoardItem(data.boardId, data.boardCreatedAt, data.boardTitle, data.boardViewCount, data.boardRecommendCount, data.userNickname);
+                return BoardItem(data.boardId, data.boardCreatedAt, data.boardTitle, data.boardViewCount, data.boardRecommendCount, data.userNickname, data.boardType);
             })
             .join('');
     }
