@@ -71,7 +71,7 @@ async function typeChoice(clickedButton, allButtons) {
     Object.values(allButtons).forEach(button => {
         button.disabled = (button === clickedButton) ? true : false;
     });
-    console.log(clickedButton.name);
+    //console.log(clickedButton.name);
     return clickedButton.name;
 }
 
@@ -86,9 +86,13 @@ secretTypeButton.disabled = true;
 setupButtons(boardCategory.noticeSelector, boardCategory, requestBoardListType, 'category');
 
 selectBoardButtons.addEventListener('click', async () => {
-    QnAcheck(requestBoardListType.category);
+    const boardType = requestBoardListType.category
+    QnAcheck(boardType);
     typeChoice(sortTypebutton.recentSorter, sortTypebutton)
-    await authCheck();
+    if (boardType != 'notice'){
+        await authCheck();
+    }
+
 });
 QnAcheck(requestBoardListType.category);
 
@@ -101,16 +105,19 @@ function QnAcheck(boardType){
     } else {
         secretQnABoardSelector.style.display = 'none';
         sortTypebutton.recommendSorter.style.display = boardType == 'notice'? 'none':'block';
-        sortTypebutton.viewSorter.style.display = boardType == 'notice'? 'none':'block';
     }
     
 }
 
-function secretQnAcheck(){
+async function secretQnAcheck(){
     requestBoardListType.category = secretCheckBox.checked ? 'secretQnA':'QnA';
     //console.log( requestBoardListType.category);
-
     sortTypebutton.viewSorter.style.display = requestBoardListType.category == 'secretQnA'?'none':'block';
+
+    if (secretCheckBox.checked){
+        const newBoardList = await boardListLoad();
+        setBoardItem(newBoardList);
+    }
 
 }
 

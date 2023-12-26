@@ -78,7 +78,8 @@ async def getBoard(id:int):
             b.commentCount,
             b.fileName,
             b.filePath,
-            u.nickname AS writerNickname
+            u.nickname AS writerNickname,
+            b.type
         FROM 
             board AS b
         JOIN 

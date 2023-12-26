@@ -1,9 +1,9 @@
-import { authCheck, ServerUrl, getCookie, getUrlId } from './utils/function.js';
+import { authCheck, ServerUrl, getCookie, getUrlId, serverSessionCheck } from './utils/function.js';
 import { commentItem } from './components/commentItem.js';
 
 const addCommentButton = document.getElementById('addComment');
 const comment = document.getElementById('comment');
-const myInfo = await authCheck();
+
 
 const boardCommponent = {
     title: document.getElementById('title'),
@@ -16,10 +16,12 @@ const boardCommponent = {
 };
 const boardId = getUrlId();
 const data = await getBoard(boardId);
+const boardType = data[0]['type'];
+const myInfo = boardType == 'notice'? await serverSessionCheck():await authCheck();
+console.log(myInfo);
 
 Object.entries(boardCommponent).forEach(([key, element]) => {
     const detail = data[0][key];
-    //console.log(data[0][key], key);
     element.innerHTML += detail;
 });
 
