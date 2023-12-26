@@ -2,6 +2,7 @@ from fastapi import APIRouter, Response, Depends, Header
 from pydantic import BaseModel
 from typing import Annotated
 from ..database.query import execute_sql_query
+from typing import Optional
 from ..controllers.session import createSession, getSessionData
 from datetime import datetime
 import hashlib
@@ -58,6 +59,20 @@ async def checkEmail(email: str):
     except Exception as e:
         return 500, "서버 오류"
     
+@router.get('/checkPower')
+async def checkPower(id:Optional[str]):
+    try:
+        res = await execute_sql_query(
+            "SELECT * FROM user WHERE idx = %s", (id,))
+        
+        if len(res) == 0:
+            return 401, "권한없음"
+        else:
+            return res[0]['power']
+    except Exception as e:
+        return 500, "서버 오류"
+    
+     
 class Signup(BaseModel):
     id:str
     password:str

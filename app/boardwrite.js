@@ -8,7 +8,7 @@ const boardInputdata = {
 const boardComponent = {
     title :'',
     content : '',
-    type : 'free',
+    type : '',
     fileName: '',
     filePath: '',
 }
@@ -32,6 +32,7 @@ console.log(myInfo.power);
 
 
 async function setupNoticeButton(){
+    boardComponent.type = managerCheck ? 'free':'notice';
     boardCategory.freeBoardSelector.disabled = managerCheck;
     boardCategory.noticeSelector.disabled = true;
 }

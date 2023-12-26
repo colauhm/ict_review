@@ -91,3 +91,10 @@ export const getQueryString = (param) => {
     const params = new URLSearchParams(window.location.search);
     return params.get(param);
 };
+
+// export const checkPower =  async (id) => {
+//     const res = await fetch(ServerUrl() + '/checkPower' + `?id=${id}`, { noCORS: true });
+//     const data = await res.json();
+//     return data;
+// }
+    

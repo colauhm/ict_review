@@ -47,7 +47,8 @@ const secretQnABoardSelector = document.querySelector('.secretQnABoardSelector')
 const secretTypeButton = document.getElementById('secretTypeButton');
 const secretCheckBox = document.getElementById('secretCheckBox');
 
-const data = await serverSessionCheck();
+const myInfo = requestBoardListType.category == 'notice'? await serverSessionCheck():await authCheck();
+console.log(myInfo);
 
 //--------------------버튼 선택시 다른 버튼은 선택버튼 활성화 나머지버튼 활성화 기능-----------//
 
@@ -142,11 +143,11 @@ const setBoardItem = async (boardData) => {
     const boardList = document.querySelector('.boardList');
     if (boardList && boardData) {
         //
-        console.log(boardData);
+        //console.log(boardData);
         boardList.innerHTML = '';
         boardList.innerHTML = boardData
             .map((data) => {
-                return BoardItem(data.boardId, data.boardCreatedAt, data.boardTitle, data.boardViewCount, data.boardRecommendCount, data.userNickname, data.boardType);
+                return BoardItem(data.boardId, data.boardCreatedAt, data.boardTitle, data.boardViewCount, data.boardRecommendCount, data.userNickname, data.boardType, myInfo.power, myInfo.nickname);
             })
             .join('');
     }
@@ -170,6 +171,7 @@ function changeStatus(allButtons){
 
 
 function setStatusButton(data){
+    console.log(data);
     statusButton.login.style.display = data? 'none':'block';
     statusButton.signup.style.display = data? 'none':'block';
     statusButton.logout.style.display = data? 'block':'none';
@@ -178,7 +180,7 @@ function setStatusButton(data){
 
 
 changeStatus(statusButton);
-setStatusButton(data);
+setStatusButton(myInfo);
 const boardList = await boardListLoad();
 setBoardItem(boardList);
 
