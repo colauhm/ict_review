@@ -16,7 +16,7 @@ const boardId = getUrlId();
 const data = await getBoard(boardId);
 const boardType = data[0]['type'];
 const myInfo = boardType == 'notice'? await serverSessionCheck():await authCheck();
-//console.log(myInfo);
+console.log(data);
 
 const commentList = await getComment(false);
 
@@ -71,7 +71,7 @@ const setComment = async (commentData) => {
 
 const addNewComment = (newCommentData) => {
     const commentList = document.querySelector('.commentList');
-    const addCommentData = commentItem(newCommentData.idx, newCommentData.createdAt, newCommentData.writerNickname, newCommentData.content, myInfo);
+    const addCommentData = commentItem(newCommentData.idx, newCommentData.createdAt, newCommentData.writerNickname, newCommentData.content, myInfo, data.writerId);
     commentList.insertAdjacentHTML('afterbegin', addCommentData);
     comment.value = '';
 };

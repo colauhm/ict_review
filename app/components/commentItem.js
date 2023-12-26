@@ -1,4 +1,4 @@
-export const commentItem = (idx, date, writer, content, info) =>{
+export const commentItem = (idx, date, writer, content, info, boardWiter) =>{
     const dateObj = new Date(date);
     const year = dateObj.getFullYear();
     const month = dateObj.getMonth() + 1;
@@ -14,7 +14,7 @@ export const commentItem = (idx, date, writer, content, info) =>{
 
     // 날짜와 시간을 합쳐서 YYYY-MM-DD hh:mm:ss
     const dateTimeStr = `${dateStr} ${timeStr}`;
-    if (info.id != writer && info.power == null){
+    if (info.id != writer && info.power == null && info.id != boardWiter){
         return`
         <div class="commentItem" id=${idx}> 
             <div class="info">

@@ -80,7 +80,8 @@ async def getBoard(id:int):
             b.fileName,
             b.filePath,
             u.nickname AS writerNickname,
-            b.type
+            b.type,
+            b.writerId
         FROM 
             board AS b
         JOIN 
