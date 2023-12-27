@@ -11,6 +11,7 @@ class Comment(BaseModel):
     boardId: int
     content: str
     
+    
 
 @router.post("/comment")
 async def addComment(data:Comment, session: Annotated[str, Header()] = None):
@@ -26,6 +27,7 @@ async def addComment(data:Comment, session: Annotated[str, Header()] = None):
             INSERT INTO
                 comment (boardId, content, writerId, createdAt) 
                 VALUES (%s, %s, %s, %s)""", (data.boardId, data.content, info.idx, today))
+    
     if res is None:
         return 400, {"message": "댓글 추가에 실패하였습니다."}
     else:
@@ -50,6 +52,7 @@ async def getComment(id:int, last:bool):
                     c.boardId = %s 
                 ORDER  BY
                     c.createdAt DESC """, (id,))
+    
     if last:
         return comments[0]
     else:
