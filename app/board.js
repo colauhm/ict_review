@@ -3,6 +3,9 @@ import { commentItem } from './components/commentItem.js';
 
 
 const wirteComment = document.querySelector('.writeComment');
+const recommendElement = document.querySelector('.recommend');
+
+const addCommentButton = document.getElementById('addComment');    
 
 const boardCommponent = {
     title: document.getElementById('title'),
@@ -12,6 +15,7 @@ const boardCommponent = {
     viewCount: document.getElementById('viewCount'),
     recommendCount: document.getElementById('recommedCount'),
 };
+
 const boardId = getUrlId();
 const boardData = await getBoard(boardId);
 const boardType = boardData[0]['type'];
@@ -94,42 +98,41 @@ async function getSelectButton(){
     return document.querySelectorAll('.edit');
 }
 
-async function showElementCheck(boardType){
-    if (boardType == 'free'){
-        const commentCount = document.querySelector('.commentCount');
-        //console.log(data[0]['commentCount']);
-        commentCount.innerHTML = `댓글 수 ${await boardCommentCount(boardId)}`;
-        wirteComment.innerHTML = `
-            <textarea placeholder="댓글을 작성해주세요!" id="comment"></textarea>
-            <button id="addComment">댓글 작성</button>
-            `
-        const addCommentButton = document.getElementById('addComment');    
-        addCommentButton.addEventListener('click', async () => {
-            await addComment();
-            const newCommentList = await getComment(true);
-            addNewComment(newCommentList);
-        });
-        await setComment(commentList);
-        getSelectButton()
-        .then((selectButton) => {
-            Object.values(selectButton).forEach(button => {
-                button.addEventListener('click', function () {
-                    const buttonName = button.getAttribute('name');
-                    console.log(buttonName);
-                    if (buttonName === 'commentDelect') {
-                        delectComment(button.id);
-                        alert('댓글이 삭제되었습니다.');
-                        window.location.href = `/board.html?id=${boardId}`;
-                    }
-                });
+addCommentButton.addEventListener('click', async () => {
+    await addComment();
+    const newCommentList = await getComment(true);
+    addNewComment(newCommentList);
+});
+
+async function editButton(){
+    getSelectButton()
+    .then((selectButton) => {
+        Object.values(selectButton).forEach(button => {
+            button.addEventListener('click', function () {
+                const buttonName = button.getAttribute('name');
+                console.log(buttonName);
+                if (buttonName === 'commentDelect') {
+                    delectComment(button.id);
+                    alert('댓글이 삭제되었습니다.');
+                    window.location.href = `/board.html?id=${boardId}`;
+                }
             });
-
-        })
-        .catch((error) => {
-            console.error(error);
         });
 
+    })
+}
+
+async function showElementCheck(boardType){
+    const commentCount = document.querySelector('.commentCount');
+    if (boardType == 'free'){
+        recommendElement.style.display =  checkBoardWriter ? 'none':'block';
+        commentCount.innerHTML += `${await boardCommentCount(boardId)}`;
+    } else {
+        commentCount.innerHTML = "";
+        wirteComment.innerHTML = ""
     }
 }
 //await commentCount(boardId);
 await showElementCheck(boardType);
+await setComment(commentList);
+await editButton();

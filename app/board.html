@@ -21,8 +21,10 @@
                 <h2 id="createdAt">생성일 </h3>
                 <h2 id="viewCount">조회수 </h2>
                 <h2 id="recommedCount">추천수 </h2>
-                <input type="checkbox" id="recommendCheckBox">
-                <button id="recommendButton">추천</button>
+                <div class="recommend">
+                    <input type="checkbox" id="recommendCheckBox">
+                    <button id="recommendButton">추천</button>
+                </div> 
             </div>
             <div class="editDeleteControl">
                 <button id="editButton">수정</button>
@@ -31,10 +33,11 @@
             <div id="content">
                 게시글 내용
             </div>
-            <div class="commentCount"></div>
+            <div class="commentCount">댓글 수 </div>
         </section>
         <section class="writeComment">
-            
+            <textarea placeholder="댓글을 작성해주세요!" id="comment"></textarea>
+            <button id="addComment">댓글 작성</button>
         </section>
         <section>
             <ol class="commentList">
