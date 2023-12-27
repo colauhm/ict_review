@@ -90,3 +90,9 @@ async def getBoard(id:int):
             b.id = %s;
         """, (id,))
     return board
+
+@router.get("/boardCommentCount")
+async def boardCommentCount(id:int):
+    res = await execute_sql_query("SELECT COUNT(*) FROM comment WHERE boardId = %s;",(id,))
+
+    return res[0]['COUNT(*)']

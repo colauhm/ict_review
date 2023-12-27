@@ -13,21 +13,27 @@ const boardCommponent = {
     recommendCount: document.getElementById('recommedCount'),
 };
 const boardId = getUrlId();
-const data = await getBoard(boardId);
-const boardType = data[0]['type'];
+const boardData = await getBoard(boardId);
+const boardType = boardData[0]['type'];
 const myInfo = boardType == 'notice'? await serverSessionCheck():await authCheck();
-console.log(data);
-
+const checkBoardWriter = myInfo.idx == boardData[0]['writerId'];
 const commentList = await getComment(false);
 
 Object.entries(boardCommponent).forEach(([key, element]) => {
-    const detail = data[0][key];
+    const detail = boardData[0][key];
     element.innerHTML += detail;
 });
 
 async function getBoard(id) {
     const components = await fetch(ServerUrl() + '/board' + `?id=${id}`, { noCORS: true });
     const data = await components.json();
+    return data;
+}
+
+async function boardCommentCount(id){
+    const res = await fetch(ServerUrl() + '/boardCommentCount' + `?id=${id}`, { noCORS: true });
+    const data = await res.json();
+    console.log(data);
     return data;
 }
 
@@ -59,11 +65,11 @@ async function getComment(last){
 const setComment = async (commentData) => {
     const commentList = document.querySelector('.commentList');
     if (commentList && commentData) {
-        //console.log(commentData);
+        console.log(commentData);
         commentList.innerHTML = '';
         commentList.innerHTML = commentData
             .map((data) => {
-                return commentItem(data.idx, data.createdAt, data.writerNickname, data.content, myInfo);
+                return commentItem(data.idx, data.createdAt, data.writerNickname, data.content, myInfo, checkBoardWriter);
             })
             .join('');
     }
@@ -71,7 +77,7 @@ const setComment = async (commentData) => {
 
 const addNewComment = (newCommentData) => {
     const commentList = document.querySelector('.commentList');
-    const addCommentData = commentItem(newCommentData.idx, newCommentData.createdAt, newCommentData.writerNickname, newCommentData.content, myInfo, data.writerId);
+    const addCommentData = commentItem(newCommentData.idx, newCommentData.createdAt, newCommentData.writerNickname, newCommentData.content, myInfo, checkBoardWriter);
     commentList.insertAdjacentHTML('afterbegin', addCommentData);
     comment.value = '';
 };
@@ -89,12 +95,10 @@ async function getSelectButton(){
 }
 
 async function showElementCheck(boardType){
-    
     if (boardType == 'free'){
-        
         const commentCount = document.querySelector('.commentCount');
         //console.log(data[0]['commentCount']);
-        commentCount.innerHTML = `댓글 수 ${data[0]['commentCount']}`;
+        commentCount.innerHTML = `댓글 수 ${await boardCommentCount(boardId)}`;
         wirteComment.innerHTML = `
             <textarea placeholder="댓글을 작성해주세요!" id="comment"></textarea>
             <button id="addComment">댓글 작성</button>
@@ -127,4 +131,5 @@ async function showElementCheck(boardType){
 
     }
 }
+//await commentCount(boardId);
 await showElementCheck(boardType);

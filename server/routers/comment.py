@@ -10,6 +10,7 @@ router = APIRouter(prefix="/api")
 class Comment(BaseModel):
     boardId: int
     content: str
+    
 
 @router.post("/comment")
 async def addComment(data:Comment, session: Annotated[str, Header()] = None):
