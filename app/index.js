@@ -42,38 +42,53 @@ const statusButton = {
     logout : document.getElementById('logout')
 }
 
-const selectBoardButtons = document.querySelector('.selectBoardButtons');
 const secretQnABoardSelector = document.querySelector('.secretQnABoardSelector');
 const secretTypeButton = document.getElementById('secretTypeButton');
 const secretCheckBox = document.getElementById('secretCheckBox');
 
 const myInfo = requestBoardListType.category == 'notice'? await serverSessionCheck():await authCheck();
-console.log(myInfo);
+const boardList = await boardListLoad();
 
 //--------------------버튼 선택시 다른 버튼은 선택버튼 활성화 나머지버튼 활성화 기능-----------//
 
-function setupButtons(firstButton, typeButton, listType, methodKey) {
-    firstButton.disabled = true;
+async function newSetboards(){
+    const newBoardList = await boardListLoad();
+    setBoardItem(newBoardList);
+}
+
+async function setDisabledButton(){
+    secretTypeButton.disabled = true;
+    sortTypebutton.recentSorter.click();
+    searchTypeButton.all.click();
+    boardCategory.noticeSelector.click();
+    searchDetailTypebutton.title.click();
+}
+
+function setupButtons(typeButton, listType, methodKey) {
     Object.values(typeButton).forEach(button => {
         button.addEventListener('click', async () => {
-            console.log(button, typeButton);
             const selectedButtonName = await typeChoice(button, typeButton);
-            listType[methodKey] = selectedButtonName;
-            const newBoardList = await boardListLoad();
-            setBoardItem(newBoardList);
-            //console.log(requestBoardListType);
-            //console.log(searchBoardListType);
+
+            listType[methodKey] = secretCheckBox.checked && selectedButtonName =='QnA' ? 'secretQnA':selectedButtonName;
+            secretCheckBox.checked = listType[methodKey] == 'secretQnA' ?  secretCheckBox.checked:false;
+            
+            await setSortButton();
+            await newSetboards();
         });
     });
 }
 
 async function typeChoice(clickedButton, allButtons) {
+    const buttonName = clickedButton.name;
     // 클릭된 버튼을 제외한 나머지 버튼들을 활성화(disabled=false)로 설정
     Object.values(allButtons).forEach(button => {
         button.disabled = (button === clickedButton) ? true : false;
     });
-    //console.log(clickedButton.name);
-    return clickedButton.name;
+    if (clickedButton.classList.contains('selectBoardButton')){
+        secretQnABoardSelector.style.display = buttonName == 'QnA'?'block':'none'; 
+        sortTypebutton.recentSorter.click();
+    }
+    return buttonName;
 }
 
 //-------------------------------게시판 선택 버튼 및 기능-----------------------------------//
@@ -82,52 +97,22 @@ document.getElementById('writePost').addEventListener('click', function (){
     window.location.href = "/boardwrite.html";
 })
 
-secretTypeButton.disabled = true;
-
-setupButtons(boardCategory.noticeSelector, boardCategory, requestBoardListType, 'category');
-
-selectBoardButtons.addEventListener('click', async () => {
-    const boardType = requestBoardListType.category
-    QnAcheck(boardType);
-    typeChoice(sortTypebutton.recentSorter, sortTypebutton)
-    if (boardType != 'notice'){
-        await authCheck();
-    }
-
-});
-QnAcheck(requestBoardListType.category);
-
-function QnAcheck(boardType){
-    if (boardType == 'QnA' || boardType == 'secretQnA'){
-        secretQnABoardSelector.style.display = 'block';
-        sortTypebutton.recommendSorter.style.display = 'none';
-        secretQnAcheck();
-        
-    } else {
-        secretQnABoardSelector.style.display = 'none';
-        sortTypebutton.recommendSorter.style.display = boardType == 'notice'? 'none':'block';
-    }
-    
-}
-
-async function secretQnAcheck(){
+secretCheckBox.addEventListener('click', async () => {
     requestBoardListType.category = secretCheckBox.checked ? 'secretQnA':'QnA';
-    //console.log( requestBoardListType.category);
-    sortTypebutton.viewSorter.style.display = requestBoardListType.category == 'secretQnA'?'none':'block';
-    const newBoardList = await boardListLoad();
-    setBoardItem(newBoardList);
+    await newSetboards();
+});
+
+async function setSortButton(){
+    const boardType = requestBoardListType.category;
+    sortTypebutton.recommendSorter.style.display = boardType == 'free'?'block':'none';
 }
 
-//---------------------------------------정렬 선택 부분----------------------------------------//
+//---------------------------------------요소 선택 부분----------------------------------------//
 
-
-setupButtons(sortTypebutton.recentSorter, sortTypebutton, requestBoardListType, 'sortMethod');
-
-//-------------------------------------검색 기준 선택 부분-------------------------------------//
-
-
-setupButtons(searchTypeButton.all, searchTypeButton, searchBoardListType, 'category');
-setupButtons(searchDetailTypebutton.title, searchDetailTypebutton, searchBoardListType, 'datailCategory');
+setupButtons(boardCategory, requestBoardListType, 'category');
+setupButtons(sortTypebutton, requestBoardListType, 'sortMethod');
+setupButtons(searchTypeButton, searchBoardListType, 'category');
+setupButtons(searchDetailTypebutton, searchBoardListType, 'datailCategory');
 
 //--------------------------------------보드 요소 불러오기---------------------------------------//
 
@@ -169,7 +154,6 @@ function changeStatus(allButtons){
     });
 }
 
-
 function setStatusButton(data){
     console.log(data);
     statusButton.login.style.display = data? 'none':'block';
@@ -178,9 +162,7 @@ function setStatusButton(data){
     document.querySelector('.changeStatus').style.display = 'flex';
 }
 
-
+setBoardItem(boardList);
 changeStatus(statusButton);
 setStatusButton(myInfo);
-const boardList = await boardListLoad();
-setBoardItem(boardList);
-
+await setDisabledButton();
