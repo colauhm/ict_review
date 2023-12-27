@@ -2,22 +2,26 @@ import { authCheck, ServerUrl, getCookie, getUrlId, serverSessionCheck } from '.
 import { commentItem } from './components/commentItem.js';
 
 
-const wirteComment = document.querySelector('.writeComment');
-const recommendElement = document.querySelector('.recommend');
 
 const addCommentButton = document.getElementById('addComment');    
+const recommend = document.querySelector('.recommend');
+
+var recommendCheckBox = document.getElementById('recommendCheckBox');
 
 const boardCommponent = {
     title: document.getElementById('title'),
     content: document.getElementById('content'),
     writerNickname: document.getElementById('writerNickname'),
     createdAt: document.getElementById('createdAt'),
-    viewCount: document.getElementById('viewCount'),
-    recommendCount: document.getElementById('recommedCount'),
+
 };
 
+
 const boardId = getUrlId();
+await boardCommentCount(boardId);
+await boardRecommendCount(boardId);
 const boardData = await getBoard(boardId);
+console.log(boardData);
 const boardType = boardData[0]['type'];
 const myInfo = boardType == 'notice'? await serverSessionCheck():await authCheck();
 const checkBoardWriter = myInfo.idx == boardData[0]['writerId'];
@@ -28,6 +32,47 @@ Object.entries(boardCommponent).forEach(([key, element]) => {
     element.innerHTML += detail;
 });
 
+
+async function recordTimeStatus(boardId){
+    const response = await fetch(ServerUrl() + '/recordTimeData' + `?boardId=${boardId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            session: getCookie('session')
+        },
+    });
+    console.log(await response.json());
+}
+
+async function recordRecommendStatus(boardId){
+    const recommendBoardData = {
+        boardId:boardId,
+        recommend:recommendCheckBox.checked
+    }
+    //console.log(JSON.stringify(recommendBoardData));
+    await fetch(ServerUrl() + '/recordRecommendData' , {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            session: getCookie('session')
+        },
+        body: JSON.stringify(recommendBoardData)
+    });
+}
+
+async function recommendData(boardId){
+   
+    const response = await fetch(ServerUrl() + '/recommendData' + `?boardId=${boardId}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            session: getCookie('session')
+        },
+    })
+    const data = await response.json();
+    return data;
+}
+
 async function getBoard(id) {
     const components = await fetch(ServerUrl() + '/board' + `?id=${id}`, { noCORS: true });
     const data = await components.json();
@@ -37,7 +82,14 @@ async function getBoard(id) {
 async function boardCommentCount(id){
     const res = await fetch(ServerUrl() + '/boardCommentCount' + `?id=${id}`, { noCORS: true });
     const data = await res.json();
-    console.log(data);
+    console.log(res);
+    return data;
+}
+
+async function boardRecommendCount(id){
+    const res = await fetch(ServerUrl() + '/boardRecommendCount' + `?id=${id}`, { noCORS: true });
+    const data = await res.json();
+    //console.log(data);
     return data;
 }
 
@@ -124,15 +176,40 @@ async function editButton(){
 
 async function showElementCheck(boardType){
     const commentCount = document.querySelector('.commentCount');
+    const wirteComment = document.querySelector('.writeComment');
+    const recommendElement = document.querySelector('.recommedCount');
+    const viewCount = document.querySelector('.viewCount');
+    
     if (boardType == 'free'){
-        recommendElement.style.display =  checkBoardWriter ? 'none':'block';
-        commentCount.innerHTML += `${await boardCommentCount(boardId)}`;
+        recommend.innerHTML = checkBoardWriter ? "":recommend.innerHTML;
+        commentCount.innerHTML += await boardCommentCount(boardId);
+        recommendElement.innerHTML += await boardRecommendCount(boardId);
+        console.log( boardData[0]['viewCount']);
+        viewCount.innerHTML += boardData[0]['viewCount'];
+        //await boardRecommendCount(boardId);
+        const recommendCheck = await recommendData(boardId);
+        console.log(recommendCheck);
+        recommendCheckBox.checked = recommendCheck['recommendStatus'];
+        const recommendContent = recommendElement.innerHTML;
+        const recommendContentWords = recommendContent.split(" ");
+        recommend.addEventListener('click', async() => {
+            await recordRecommendStatus(boardId);
+            recommendContentWords[recommendContentWords.length - 1] = await boardRecommendCount(boardId);
+            recommendElement.innerHTML = recommendContentWords.join(" ");
+        });
     } else {
+        recommendElement.innerHTML = "";
         commentCount.innerHTML = "";
-        wirteComment.innerHTML = ""
+        wirteComment.innerHTML = "";
     }
 }
+
+async function recommendStatus(checkBox){
+    checkBox.checked
+}
 //await commentCount(boardId);
+
+await recordTimeStatus(boardId);
 await showElementCheck(boardType);
 await setComment(commentList);
 await editButton();

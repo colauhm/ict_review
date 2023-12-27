@@ -35,8 +35,10 @@ CREATE TABLE comment (
 	PRIMARY KEY (idx) 
 );
 CREATE TABLE status (
+	idx int NOT NULL AUTO_INCREMENT,
 	userId     		INT DEFAULT NULL,
     boardId    		INT DEFAULT NULL,
 	recommendStatus BOOLEAN DEFAULT NULL,
-	viewStatus 		DATETIME DEFAULT NULL
+	viewStatus 		DATETIME DEFAULT NULL,
+    PRIMARY KEY (idx) 
 );

@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from typing import Optional
 from ..database.query import execute_sql_query
 from ..controllers.session import getSessionData
-from datetime import datetime
+from datetime import datetime, timedelta
 
 class AddBoard(BaseModel):
     title : str
@@ -20,8 +20,77 @@ class modifyBoard(BaseModel):
     fileName : Optional[str]
     filePath : Optional[str]
 
+class RecordData(BaseModel):
+    boardId : int
+    recommend :Optional[bool]
 
 router = APIRouter(prefix="/api")
+
+@router.post("/recordTimeData")
+async def recordTimeData(boardId : int, session: Annotated[str, Header()] = None):
+    info = await getSessionData(session)
+    today = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    res = await execute_sql_query("""
+        SELECT viewStatus FROM status WHERE userId = %s AND boardId = %s;
+    """,(info.idx, boardId,))
+    
+    if len(res) == 0:
+        await execute_sql_query("""
+            INSERT INTO status (userId, boardId, recommendStatus, viewStatus) 
+            VALUES (%s, %s, %s, %s)
+        """, (info.idx, boardId, False, today,))
+        await execute_sql_query("""
+            UPDATE board
+            SET viewCount = viewCount + 1
+            WHERE id = %s;
+        """, (boardId,))
+        return 200, "firstUpdate", "first"
+    if res[0]['viewStatus'] + timedelta(hours=1) < datetime.now():
+        await execute_sql_query("""
+            UPDATE status
+            SET viewStatus = %s
+            WHERE userId = %s AND boardId = %s;
+        """, (today, info.idx, boardId,))
+        await execute_sql_query("""
+            UPDATE board
+            SET viewCount = viewCount + 1
+            WHERE id = %s;
+        """, (boardId,))
+        return 200, "timeUpdate"
+    return 200, "viewed within 1 hour"
+    
+@router.post("/recordRecommendData")
+async def recordRecommendData(data:RecordData, session: Annotated[str, Header()] = None):
+    print(data)
+    info = await getSessionData(session)
+    await execute_sql_query("""
+            UPDATE status
+            SET recommendStatus = %s
+            WHERE userId = %s AND boardId = %s;
+        """, (data.recommend, info.idx, data.boardId,))
+    if data.recommend:
+        await execute_sql_query("""
+        UPDATE board
+        SET recommendCount = recommendCount + 1
+        WHERE id = %s;
+        """, (data.boardId,))
+    else:
+        await execute_sql_query("""
+        UPDATE board
+        SET recommendCount = recommendCount - 1
+        WHERE id = %s;
+        """, (data.boardId,))
+    return 200
+
+    
+@router.get("/recommendData")
+async def recommendData(boardId, session: Annotated[str, Header()] = None):
+    info = await getSessionData(session)
+    recommendStatus = await execute_sql_query("""
+        SELECT recommendStatus FROM status WHERE userId = %s AND boardId = %s;
+    """,(info.idx, boardId,))
+    return recommendStatus[0]
+
 
 @router.post("/postBoard")
 async def addBoard(data: AddBoard, session: Annotated[str, Header()] = None):
@@ -94,4 +163,11 @@ async def getBoard(id:int):
 @router.get("/boardCommentCount")
 async def boardCommentCount(id:int):
     res = await execute_sql_query("SELECT COUNT(*) FROM comment WHERE boardId = %s;",(id,))
-    return res[0]['COUNT(*)']
+    commentCount = res[0]['COUNT(*)']
+    return commentCount
+
+@router.get("/boardRecommendCount")
+async def boardRecommendCount(id:int):
+    res = await execute_sql_query("SELECT COUNT(*) FROM status WHERE boardId = %s AND recommendStatus = 1;",(id,))
+    recommendCount = res[0]['COUNT(*)']
+    return recommendCount
