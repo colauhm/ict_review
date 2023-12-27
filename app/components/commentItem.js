@@ -11,10 +11,10 @@ export const commentItem = (commentIdx, date, commentWriter, content, commentWri
     const dateStr = `${year}-${month}-${day}`;
     // 시간 포맷 변경 hh:mm:ss
     const timeStr = `${hours}:${minutes}:${seconds}`;
-    
+    console.log(checkBoardWriter);
     // 날짜와 시간을 합쳐서 YYYY-MM-DD hh:mm:ss
     const dateTimeStr = `${dateStr} ${timeStr}`;
-    if (commentWriterInfo.id != commentWriter && commentWriterInfo.power == null && checkBoardWriter){
+    if (commentWriterInfo.id != commentWriter && commentWriterInfo.power == null && !checkBoardWriter){
         return`
         <div class="commentItem" id=${commentIdx}> 
             <div class="info">
