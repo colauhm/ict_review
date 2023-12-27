@@ -85,6 +85,7 @@ async function typeChoice(clickedButton, allButtons) {
         button.disabled = (button === clickedButton) ? true : false;
     });
     if (clickedButton.classList.contains('selectBoardButton')){
+        buttonName = buttonName && buttonName == 'notice' ? 'notice':await authCheck();
         secretQnABoardSelector.style.display = buttonName == 'QnA'?'block':'none'; 
         sortTypebutton.recentSorter.click();
     }
@@ -127,9 +128,6 @@ async function boardListLoad(){
 const setBoardItem = async (boardData) => {
     const boardList = document.querySelector('.boardList');
     if (boardList && boardData) {
-        //
-        //console.log(boardData);
-        boardList.innerHTML = '';
         boardList.innerHTML = boardData
             .map((data) => {
                 return BoardItem(data.boardId, data.boardCreatedAt, data.boardTitle, data.boardViewCount, data.boardRecommendCount, data.userNickname, data.boardType, myInfo.power, myInfo.nickname);
