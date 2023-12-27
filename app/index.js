@@ -85,7 +85,9 @@ async function typeChoice(clickedButton, allButtons) {
         button.disabled = (button === clickedButton) ? true : false;
     });
     if (clickedButton.classList.contains('selectBoardButton')){
-        buttonName = buttonName && buttonName == 'notice' ? 'notice':await authCheck();
+        if (buttonName != 'notice'){
+            await authCheck();
+        }
         secretQnABoardSelector.style.display = buttonName == 'QnA'?'block':'none'; 
         sortTypebutton.recentSorter.click();
     }
