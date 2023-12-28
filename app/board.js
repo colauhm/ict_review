@@ -3,10 +3,10 @@ import { commentItem } from './components/commentItem.js';
 
 
 
-const addCommentButton = document.getElementById('addComment');    
+const addCommentButton = document.getElementById('addComment');
 const recommend = document.querySelector('.recommend');
 
-var recommendCheckBox = document.getElementById('recommendCheckBox');
+
 
 const boardCommponent = {
     title: document.getElementById('title'),
@@ -18,50 +18,38 @@ const boardCommponent = {
 
 
 const boardId = getUrlId();
-await boardCommentCount(boardId);
-await boardRecommendCount(boardId);
 const boardData = await getBoard(boardId);
-console.log(boardData);
+console.log(boardData[0]);
 const boardType = boardData[0]['type'];
 const myInfo = boardType == 'notice'? await serverSessionCheck():await authCheck();
 const checkBoardWriter = myInfo.idx == boardData[0]['writerId'];
 const commentList = await getComment(false);
+const recommendExist = await recommendData(boardId);
 
 Object.entries(boardCommponent).forEach(([key, element]) => {
     const detail = boardData[0][key];
     element.innerHTML += detail;
 });
 
-
-async function recordTimeStatus(boardId){
-    const response = await fetch(ServerUrl() + '/recordTimeData' + `?boardId=${boardId}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            session: getCookie('session')
-        },
-    });
-    console.log(await response.json());
-}
-
-async function recordRecommendStatus(boardId){
-    const recommendBoardData = {
-        boardId:boardId,
-        recommend:recommendCheckBox.checked
+async function recordStatus(boardId, recordType, recommend){
+    const recordData = {
+        boardId :boardId,
+        recordType : recordType,
+        recommend : recommend
     }
-    //console.log(JSON.stringify(recommendBoardData));
-    await fetch(ServerUrl() + '/recordRecommendData' , {
+    console.log(recordData);
+    const response = await fetch(ServerUrl() + '/recordData' , {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             session: getCookie('session')
         },
-        body: JSON.stringify(recommendBoardData)
+        body: JSON.stringify(recordData)
     });
 }
 
 async function recommendData(boardId){
-   
+
     const response = await fetch(ServerUrl() + '/recommendData' + `?boardId=${boardId}`, {
         method: 'GET',
         headers: {
@@ -70,6 +58,7 @@ async function recommendData(boardId){
         },
     })
     const data = await response.json();
+    console.log(data);  
     return data;
 }
 
@@ -115,7 +104,7 @@ async function getComment(last){
     const boardId = getUrlId();
     const commentElement = await fetch(ServerUrl() + '/comment' + `?id=${boardId}` +`&&last=${last}`, {noCORS: true});
     const data = await commentElement.json();
-    return data; 
+    return data;
 }
 
 const setComment = async (commentData) => {
@@ -179,37 +168,27 @@ async function showElementCheck(boardType){
     const wirteComment = document.querySelector('.writeComment');
     const recommendElement = document.querySelector('.recommedCount');
     const viewCount = document.querySelector('.viewCount');
-    
+    viewCount.innerHTML += boardData[0]['viewCount'] ? boardData[0]['viewCount']:0; 
     if (boardType == 'free'){
         recommend.innerHTML = checkBoardWriter ? "":recommend.innerHTML;
-        commentCount.innerHTML += await boardCommentCount(boardId);
-        recommendElement.innerHTML += await boardRecommendCount(boardId);
+        commentCount.innerHTML += boardData[0]['commentCount'];
+        recommendElement.innerHTML += boardData[0]['recommendCount']
+        const recommendCheckBox = document.getElementById('recommendCheckBox');
         console.log( boardData[0]['viewCount']);
-        viewCount.innerHTML += boardData[0]['viewCount'];
-        //await boardRecommendCount(boardId);
-        const recommendCheck = await recommendData(boardId);
-        console.log(recommendCheck);
-        recommendCheckBox.checked = recommendCheck['recommendStatus'];
-        const recommendContent = recommendElement.innerHTML;
-        const recommendContentWords = recommendContent.split(" ");
+        recommendCheckBox.checked = recommendExist['recommendStatus'];
         recommend.addEventListener('click', async() => {
-            await recordRecommendStatus(boardId);
-            recommendContentWords[recommendContentWords.length - 1] = await boardRecommendCount(boardId);
-            recommendElement.innerHTML = recommendContentWords.join(" ");
+            console.log(recommendCheckBox.checked);
+            await recordStatus(boardId, 'recommend', recommendCheckBox.checked);
         });
     } else {
         recommendElement.innerHTML = "";
+        recommend.innerHTML = "";
         commentCount.innerHTML = "";
         wirteComment.innerHTML = "";
     }
 }
 
-async function recommendStatus(checkBox){
-    checkBox.checked
-}
-//await commentCount(boardId);
-
-await recordTimeStatus(boardId);
+await recordStatus(boardId, 'time', null);
 await showElementCheck(boardType);
 await setComment(commentList);
 await editButton();

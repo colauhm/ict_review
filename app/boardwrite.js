@@ -152,7 +152,7 @@ async function uploadFile(formData) {
 async function postWriteData(){
     const {...props} = boardComponent;
     console.log(props);
-    const response = await fetch(ServerUrl() + '/postBoard', {
+    const response = await fetch(ServerUrl() + '/board', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

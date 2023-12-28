@@ -48,7 +48,7 @@ const secretCheckBox = document.getElementById('secretCheckBox');
 
 const myInfo = requestBoardListType.category == 'notice'? await serverSessionCheck():await authCheck();
 const boardList = await boardListLoad();
-
+console.log(boardList[0]);
 //--------------------버튼 선택시 다른 버튼은 선택버튼 활성화 나머지버튼 활성화 기능-----------//
 
 async function newSetboards(){
