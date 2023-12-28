@@ -41,12 +41,9 @@ async def recordData(data:RecordData, session: Annotated[str, Header()] = None):
             await execute_sql_query("""
                 INSERT INTO status (userId, boardId, recommendStatus, viewStatus, viewCount) 
                 VALUES (%s, %s, %s, %s, %s)
-            """, (info.idx, data.boardId, False, today, 0,))
-            await execute_sql_query("""
-                UPDATE status
-                SET viewCount = 1
-                WHERE userId = %s AND boardId = %s;
-            """, (info.idx, data.boardId,)) 
+            """, (info.idx, data.boardId, False, today, 1,))
+            test = await execute_sql_query("SELECT * FROM status")
+            print(test[0])
             print('분기 2   ')
             return 200, "firstUpdate", "first"
         if res[0]['viewStatus'] + timedelta(hours=1) < datetime.now():
@@ -76,6 +73,9 @@ async def recommendData(boardId, session: Annotated[str, Header()] = None):
     recommendStatus = await execute_sql_query("""
         SELECT recommendStatus FROM status WHERE userId = %s AND boardId = %s;
     """,(info.idx, boardId,))
+    print(recommendStatus)
+    if len(recommendStatus) == 0:
+        return 0
     return recommendStatus[0]
 
 
