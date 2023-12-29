@@ -5,6 +5,7 @@ import { commentItem } from './components/commentItem.js';
 const boardId = getUrlId();
 
 const showElement = {
+
     addCommentButton : document.getElementById('addComment'),
     recommendCheckBox : document.getElementById('recommendCheckBox'),
     commentCountData : document.getElementById('commentCountData'),
@@ -14,6 +15,7 @@ const showElement = {
     commentCount : document.querySelector('.commentCount'),
     recommendCount : document.querySelector('.recommendCount'),
     recommend : document.querySelector('.recommend')
+    
 }
 
 const boardCommponent = {
@@ -24,10 +26,15 @@ const boardCommponent = {
 
 };
 
+const boardEdit = {
+    boardChangeButtons : document.querySelector('.boardChangeButtons'),
+    boardEditButton :document.getElementById('editButton'),
+    boardDeleteButton :document.getElementById('deleteButton')
+}
+
 recordStatus(boardId, 'time', null);
 
 const boardData = await getBoard(boardId);
-//console.log(boardData);
 const boardType = boardData[0]['type'];
 const myInfo = await checkInfo(boardType)
 const checkBoardWriter = myInfo.idx == boardData[0]['writerId'];
@@ -115,6 +122,14 @@ const delectComment = async (commentId) => {
     console.log(await response.json());
 };
 
+const delectBoard = async (boardId) => {
+    const response = await fetch(ServerUrl() + `/board/${boardId}`, {
+        method: 'DELETE',
+        headers: { session: getCookie('session') }
+    });
+    console.log(await response.json());
+}
+
 async function getSelectButton(){
     return document.querySelectorAll('.edit');
 }
@@ -125,7 +140,7 @@ showElement.addCommentButton.addEventListener('click', async () => {
     window.location.href = `/board.html?id=${boardId}`;
 });
 
-async function editButton(){
+async function commentEditButton(){
     getSelectButton()
     .then((selectButton) => {
         Object.values(selectButton).forEach(button => {
@@ -133,9 +148,14 @@ async function editButton(){
                 const buttonName = button.getAttribute('name');
                 console.log(buttonName);
                 if (buttonName === 'commentDelect') {
-                    delectComment(button.id);
-                    alert('댓글이 삭제되었습니다.');
-                    window.location.href = `/board.html?id=${boardId}`;
+                    const result = window.confirm("댓글을 삭제하시겠습니까?");
+                    if(result){
+                        delectComment(button.id);
+                        alert('댓글이 삭제되었습니다.');
+                        window.location.href = `/board.html?id=${boardId}`;
+                    } else {
+                        alert('삭제가 취소되었습니다.');
+                    }
                 }
             });
         });
@@ -151,6 +171,7 @@ async function displayElement(boardType){
     });
     if (checkBoardWriter){
         showElement.recommend.innerHTML = "";
+
     } else {
         showElement.recommendCheckBox.checked = boardData[0]['recommendStatus'];  
     }
@@ -171,9 +192,25 @@ showElement.recommendCheckBox.addEventListener('change', async () => {
     await setNewRecommendCountData();
 });
 
+boardEdit.boardDeleteButton.addEventListener('click', () => {
+    const result = window.confirm('게시글을 삭제하시겟습니까?');
+    if (result){
+        delectBoard(boardId);
+        alert('게시글이 삭제되었습니다.');
+        //window.location.href = '/';
+    } else {
+        alert('게시글 삭제가 취소되었습니다.');
+    }
+});
 
+async function boardEditButtonSet(){
+    if (!(checkBoardWriter /*&&답글이 안달렸다면*/)){
+        boardEdit.boardChangeButtons.innerHTML = ""
+    }
+}
 
 
 await showElementCheck(boardType);
 await setComment(commentList);
-await editButton();
+await commentEditButton();
+await boardEditButtonSet();

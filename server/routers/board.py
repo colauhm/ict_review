@@ -157,3 +157,17 @@ async def getBoard(boardId:int, session: Annotated[str, Header()] = None):
             b.id = %s AND s.userId = %s;
         """, (boardId, info.idx,))
     return board
+
+
+@router.delete("/board/{id}")
+async def deleteBoard(id: str, session: Annotated[str, Header()] = None):
+
+    info = await getSessionData(session)
+    # 게시글 삭제 로직
+    res = await execute_sql_query("DELETE FROM board WHERE id = %s AND writerId = %s", (id, info.idx,))
+    res = await execute_sql_query("DELETE FROM status WHERE boardId = %s AND UserId = %s", (id, info.idx,))
+    # print(res)
+    if (res == 0):
+        return 401, {'message': '삭제 권한이 없습니다.'}
+    else:
+        return 200, {'message': '삭제되었습니다.'}
