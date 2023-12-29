@@ -62,5 +62,5 @@
      userId     		INT DEFAULT NULL,
      boardId    		INT DEFAULT NULL,
      recommendStatus        BOOLEAN DEFAULT NULL,
-     viewStatus 		DATETIME DEFAULT NULL
-
+     viewStatus 		DATETIME DEFAULT NULL,
+     viewCount                  INT DEFAULT 0
