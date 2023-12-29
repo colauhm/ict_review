@@ -53,7 +53,8 @@ console.log(boardList);
 
 async function newSetboards(){
     const newBoardList = await boardListLoad();
-    setBoardItem(newBoardList);
+    console.log(newBoardList);
+    await setBoardItem(newBoardList);
 }
 
 async function setDisabledButton(){
@@ -124,7 +125,7 @@ async function boardListLoad(){
     //console.log(requestBoardListType, searchBoardListType);
     const boardList = await fetch(ServerUrl() + '/boards' + `?category=${category}` + `&sortType=${sortMethod}`, {noCORS: true });
     const data = await boardList.json();
-    //console.log(data);
+    console.log(data);
     return data;
 }
 const setBoardItem = async (boardData) => {

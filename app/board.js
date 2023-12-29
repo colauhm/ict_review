@@ -1,4 +1,4 @@
-import { checkInfo, ServerUrl, getCookie, getUrlId, serverSessionCheck } from './utils/function.js';
+import { checkInfo, ServerUrl, getCookie, getUrlId} from './utils/function.js';
 import { commentItem } from './components/commentItem.js';
 
 
