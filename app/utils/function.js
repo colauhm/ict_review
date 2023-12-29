@@ -93,9 +93,17 @@ export const getQueryString = (param) => {
 };
 
 export async function checkInfo(boardType){
-    if (boardType == 'notice'){
-        return await serverSessionCheck();
+    const noobInfo = {
+        email:0,
+        id:0,
+        nickname:0,
+        idx:0,
+        power:null
     }
-    return await authCheck();
+    const info = await serverSessionCheck();
+    if (boardType == 'notice' && info){
+        return await authCheck();
+    }
+    return noobInfo
 }
 

@@ -1,4 +1,4 @@
-import { checkInfo, ServerUrl, getCookie, getUrlId} from './utils/function.js';
+import { checkInfo, ServerUrl, getCookie, getUrlId, serverSessionCheck} from './utils/function.js';
 import { commentItem } from './components/commentItem.js';
 
 
@@ -32,7 +32,7 @@ const boardEdit = {
     boardDeleteButton :document.getElementById('deleteButton')
 }
 
-recordStatus(boardId, 'time', null);
+if (await serverSessionCheck()){recordStatus(boardId, 'time', null);}
 
 const boardData = await getBoard(boardId);
 const boardType = boardData[0]['type'];
@@ -197,7 +197,7 @@ boardEdit.boardDeleteButton.addEventListener('click', () => {
     if (result){
         delectBoard(boardId);
         alert('게시글이 삭제되었습니다.');
-        //window.location.href = '/';
+        window.location.href = '/';
     } else {
         alert('게시글 삭제가 취소되었습니다.');
     }

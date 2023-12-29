@@ -135,29 +135,54 @@ async def getBoards(category:str, sortType:str):
     return boards
 
 @router.get("/board")
-async def getBoard(boardId:int, session: Annotated[str, Header()] = None):
+async def getBoard(boardId: int, session: str = Header(default=None)):
     info = await getSessionData(session)
-    viewCount = await execute_sql_query("SELECT SUM(viewCount) FROM status WHERE boardId = %s;",(boardId,))
-    commentCount = await execute_sql_query("SELECT COUNT(*) FROM comment WHERE boardId = %s;",(boardId,))
-    recommendCount = await execute_sql_query("SELECT COUNT(*) FROM status WHERE boardId = %s AND recommendStatus = 1;",(boardId,))
-    await execute_sql_query("""
-             UPDATE board
-             SET commentCount = %s
-             WHERE id = %s;
-         """, (commentCount[0]['COUNT(*)'],boardId,))
-    await execute_sql_query("""
-             UPDATE board
-             SET recommendCount = %s
-             WHERE id = %s;
-         """, (recommendCount[0]['COUNT(*)'],boardId,))    
-    await execute_sql_query("""
-             UPDATE board
-             SET viewCount = %s
-             WHERE id = %s;
-         """, (viewCount[0]['SUM(viewCount)'],boardId,))
-    print(viewCount)   
-    board = await execute_sql_query("""
-       SELECT 
+    if (info):
+        viewCount = await execute_sql_query("SELECT SUM(viewCount) FROM status WHERE boardId = %s;",(boardId,))
+        commentCount = await execute_sql_query("SELECT COUNT(*) FROM comment WHERE boardId = %s;",(boardId,))
+        recommendCount = await execute_sql_query("SELECT COUNT(*) FROM status WHERE boardId = %s AND recommendStatus = 1;",(boardId,))
+        await execute_sql_query("""
+                UPDATE board
+                SET commentCount = %s
+                WHERE id = %s;
+            """, (commentCount[0]['COUNT(*)'],boardId,))
+        await execute_sql_query("""
+                UPDATE board
+                SET recommendCount = %s
+                WHERE id = %s;
+            """, (recommendCount[0]['COUNT(*)'],boardId,))    
+        await execute_sql_query("""
+                UPDATE board
+                SET viewCount = %s
+                WHERE id = %s;
+            """, (viewCount[0]['SUM(viewCount)'],boardId,))
+        print(viewCount)   
+        board = await execute_sql_query("""
+        SELECT 
+                b.title,
+                b.content,
+                b.createdAt,
+                b.viewCount,
+                b.recommendCount,
+                b.commentCount,
+                b.fileName,
+                b.filePath,
+                u.nickname AS writerNickname,
+                b.type,
+                b.writerId,
+                s.recommendStatus
+            FROM 
+                board AS b
+            JOIN 
+                user AS u ON b.writerId = u.idx
+            LEFT JOIN
+                status AS s ON b.id = s.boardId
+            WHERE 
+                b.id = %s AND s.userId = %s;
+            """, (boardId, info.idx,))
+    else:
+        board = await execute_sql_query("""
+        SELECT 
             b.title,
             b.content,
             b.createdAt,
@@ -168,8 +193,7 @@ async def getBoard(boardId:int, session: Annotated[str, Header()] = None):
             b.filePath,
             u.nickname AS writerNickname,
             b.type,
-            b.writerId,
-            s.recommendStatus
+            b.writerId
         FROM 
             board AS b
         JOIN 
@@ -177,8 +201,8 @@ async def getBoard(boardId:int, session: Annotated[str, Header()] = None):
         LEFT JOIN
             status AS s ON b.id = s.boardId
         WHERE 
-            b.id = %s AND s.userId = %s;
-        """, (boardId, info.idx,))
+            b.id = %s;
+            """, (boardId,))
     return board
 
 
