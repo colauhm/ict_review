@@ -92,9 +92,10 @@ export const getQueryString = (param) => {
     return params.get(param);
 };
 
-// export const checkPower =  async (id) => {
-//     const res = await fetch(ServerUrl() + '/checkPower' + `?id=${id}`, { noCORS: true });
-//     const data = await res.json();
-//     return data;
-// }
-    
+export async function checkInfo(boardType){
+    if (boardType == 'notice'){
+        return await serverSessionCheck();
+    }
+    return await authCheck();
+}
+

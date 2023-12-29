@@ -1,4 +1,4 @@
-import { authCheck, ServerUrl, serverSessionCheck, deleteCookie } from './utils/function.js';
+import { checkInfo, authCheck, ServerUrl, serverSessionCheck, deleteCookie } from './utils/function.js';
 import { BoardItem } from './components/boardItem.js';
 const requestBoardListType = {
     category : 'notice',
@@ -46,9 +46,9 @@ const secretQnABoardSelector = document.querySelector('.secretQnABoardSelector')
 const secretTypeButton = document.getElementById('secretTypeButton');
 const secretCheckBox = document.getElementById('secretCheckBox');
 
-const myInfo = requestBoardListType.category == 'notice'? await serverSessionCheck():await authCheck();
+const myInfo = await checkInfo(requestBoardListType.category);
 const boardList = await boardListLoad();
-console.log(boardList[0]);
+console.log(boardList);
 //--------------------버튼 선택시 다른 버튼은 선택버튼 활성화 나머지버튼 활성화 기능-----------//
 
 async function newSetboards(){

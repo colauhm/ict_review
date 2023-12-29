@@ -1,4 +1,4 @@
-import { authCheck, ServerUrl, getCookie, getUrlId, serverSessionCheck } from './utils/function.js';
+import { checkInfo, ServerUrl, getCookie, getUrlId, serverSessionCheck } from './utils/function.js';
 import { commentItem } from './components/commentItem.js';
 
 
@@ -8,7 +8,7 @@ const showElement = {
     addCommentButton : document.getElementById('addComment'),
     recommendCheckBox : document.getElementById('recommendCheckBox'),
     commentCountData : document.getElementById('commentCountData'),
-        recommendCountData : document.getElementById('recommendCountData'),
+    recommendCountData : document.getElementById('recommendCountData'),
     viewCountData : document.getElementById('viewCountData'),
     wirteComment : document.querySelector('.writeComment'),
     commentCount : document.querySelector('.commentCount'),
@@ -24,19 +24,19 @@ const boardCommponent = {
 
 };
 
-await recordStatus(boardId, 'time', null);
+recordStatus(boardId, 'time', null);
 
 const boardData = await getBoard(boardId);
+//console.log(boardData);
 const boardType = boardData[0]['type'];
-const myInfo = boardType == 'notice'? await serverSessionCheck():await authCheck();
+const myInfo = await checkInfo(boardType)
 const checkBoardWriter = myInfo.idx == boardData[0]['writerId'];
 const commentList = await getComment(false);
-const recommendExist = await recommendData(boardId);
 
-async function setNewBoardData(data){
+
+async function setNewRecommendCountData(){
     const newBoardData =  await getBoard(boardId);
-    console.log(newBoardData[0][data])
-    return newBoardData[0][data];
+    showElement.recommendCountData.innerHTML = newBoardData[0]['recommendCount']; 
 } 
 
 Object.entries(boardCommponent).forEach(([key, element]) => {
@@ -60,23 +60,11 @@ async function recordStatus(boardId, recordType, recommend){
     });
 }
 
-async function recommendData(boardId){
-
-    const response = await fetch(ServerUrl() + '/recommendData' + `?boardId=${boardId}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            session: getCookie('session')
-        },
-    })
-    const data = await response.json();
-    console.log(data);  
-    return data;
-}
-
-async function getBoard(id) {
-    const components = await fetch(ServerUrl() + '/board' + `?id=${id}`, { noCORS: true });
+async function getBoard(boardId) {
+    //console.log(boardId);
+    const components = await fetch(ServerUrl() + '/board' + `?boardId=${boardId}`, { headers: {session: getCookie('session')}});
     const data = await components.json();
+    //console.log(data);
     return data;
 }
 
@@ -119,13 +107,6 @@ const setComment = async (commentData) => {
     }
 };
 
-const addNewComment = (newCommentData) => {
-    const commentList = document.querySelector('.commentList');
-    const addCommentData = commentItem(newCommentData.idx, newCommentData.createdAt, newCommentData.writerNickname, newCommentData.content, myInfo, checkBoardWriter);
-    commentList.insertAdjacentHTML('afterbegin', addCommentData);
-    comment.value = '';
-};
-
 const delectComment = async (commentId) => {
     const response = await fetch(ServerUrl() + `/comment/${commentId}`, {
         method: 'DELETE',
@@ -140,8 +121,8 @@ async function getSelectButton(){
 
 showElement.addCommentButton.addEventListener('click', async () => {
     await addComment();
-    const newCommentList = await getComment(true);
-    addNewComment(newCommentList);
+    alert('댓글이 작성되었습니다.');
+    window.location.href = `/board.html?id=${boardId}`;
 });
 
 async function editButton(){
@@ -167,23 +148,31 @@ async function displayElement(boardType){
         if (element instanceof Node && boardType != 'free'){
             element.innerHTML = "";
         }
-});
+    });
+    if (checkBoardWriter){
+        showElement.recommend.innerHTML = "";
+    } else {
+        showElement.recommendCheckBox.checked = boardData[0]['recommendStatus'];  
+    }
 }
 
 async function showElementCheck(boardType){ 
     displayElement(boardType);
     showElement.viewCountData.innerHTML = boardData[0]['viewCount']; 
-    console.log(boardData[0]);
-    showElement.recommend.innerHTML = checkBoardWriter ? "":showElement.recommend.innerHTML;
     showElement.commentCountData.innerHTML = boardData[0]['commentCount'];
-    showElement.recommendCountData.innerHTML = boardData[0]['recommendCount'];          
-    showElement.recommendCheckBox.checked = recommendExist['recommendStatus'];
-    console.log(showElement.recommendCountData.innerHTML);
-    showElement.recommend.addEventListener('click', async() => {
-        await recordStatus(boardId, 'recommend', showElement.recommendCheckBox.checked);
-        showElement.recommendCountData.innerHTML = await setNewBoardData('recommendCount');           
-    });
+    showElement.recommendCountData.innerHTML = boardData[0]['recommendCount']; 
 }
+
+showElement.recommendCheckBox.addEventListener('change', async () => {
+    const isChecked = showElement.recommendCheckBox.checked;
+    const recommendValue = isChecked ? true : false;
+    console.log(recommendValue);
+    await recordStatus(boardId, 'recommend', recommendValue);
+    await setNewRecommendCountData();
+});
+
+
+
 
 await showElementCheck(boardType);
 await setComment(commentList);
