@@ -1,5 +1,8 @@
 import { checkInfo, authCheck, ServerUrl, serverSessionCheck, deleteCookie } from './utils/function.js';
 import { BoardItem } from './components/boardItem.js';
+
+const searchButtons = document.querySelector('.searchButtons');
+
 const requestBoardListType = {
     category : 'notice',
     sortMethod : 'boardCreatedAt'
@@ -155,15 +158,18 @@ function changeStatus(allButtons){
     });
 }
 
-function setStatusButton(data){
+function setShowButton(data){
     console.log(data);
     statusButton.login.style.display = data? 'none':'block';
     statusButton.signup.style.display = data? 'none':'block';
     statusButton.logout.style.display = data? 'block':'none';
+    if (!data){
+        searchButtons.innerHTML = "";
+    }
     document.querySelector('.changeStatus').style.display = 'flex';
 }
 
 setBoardItem(boardList);
 changeStatus(statusButton);
-setStatusButton(myInfo);
+setShowButton(myInfo);
 await setDisabledButton();
