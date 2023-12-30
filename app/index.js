@@ -2,15 +2,18 @@ import { checkInfo, authCheck, ServerUrl, serverSessionCheck, deleteCookie } fro
 import { BoardItem } from './components/boardItem.js';
 
 const searchButtons = document.querySelector('.searchButtons');
-
+const searchCheck = document.getElementById('searchCheck');
+const selectButtons = document.querySelector('.seclectButtons');
+const searchType = document.querySelector(".searchType");
 const requestBoardListType = {
     category : 'notice',
     sortMethod : 'boardCreatedAt'
 }
 
+
 const searchBoardListType = {
     category : 'all',
-    datailCategory : 'title',
+    datailCategory : 'b.title',
     searchContent : ''
 }
 
@@ -36,7 +39,7 @@ const searchTypeButton = {
 const searchDetailTypebutton = {
     title : document.getElementById('titleSearchButton'),
     content : document.getElementById('contentSearchButton'),
-    writer : document.getElementById('writerSearchButton')
+    nickname : document.getElementById('writerSearchButton')
 }
 
 const statusButton = {
@@ -56,7 +59,6 @@ console.log(boardList);
 
 async function newSetboards(){
     const newBoardList = await boardListLoad();
-    console.log(newBoardList);
     await setBoardItem(newBoardList);
 }
 
@@ -72,12 +74,22 @@ function setupButtons(typeButton, listType, methodKey) {
     Object.values(typeButton).forEach(button => {
         button.addEventListener('click', async () => {
             const selectedButtonName = await typeChoice(button, typeButton);
-
-            listType[methodKey] = secretCheckBox.checked && selectedButtonName =='QnA' ? 'secretQnA':selectedButtonName;
-            secretCheckBox.checked = listType[methodKey] == 'secretQnA' ?  secretCheckBox.checked:false;
-            
-            await setSortButton();
-            await newSetboards();
+            console.log(selectedButtonName, searchCheck.checked);
+            if(searchCheck.checked){
+                if (typeButton == searchDetailTypebutton){
+                    const detail = selectedButtonName == 'nickname' ? 'u.':'b.';
+                    listType[methodKey] = detail + selectedButtonName;
+                } else {
+                    listType[methodKey] = selectedButtonName;
+                }
+                await setSearchboard();
+            }else {
+                listType[methodKey] = secretCheckBox.checked && selectedButtonName =='QnA' ? 'secretQnA':selectedButtonName;
+                secretCheckBox.checked = listType[methodKey] == 'secretQnA' ?  secretCheckBox.checked:false;
+                console.log(listType);
+                await setSortButton();
+                await newSetboards();
+            }
         });
     });
 }
@@ -126,11 +138,19 @@ setupButtons(searchDetailTypebutton, searchBoardListType, 'datailCategory');
 async function boardListLoad(){
     const {category, sortMethod} = requestBoardListType;
     //console.log(requestBoardListType, searchBoardListType);
-    const boardList = await fetch(ServerUrl() + '/boards' + `?category=${category}` + `&sortType=${sortMethod}`, {noCORS: true });
+    const boardList = await fetch(ServerUrl() + '/boards' + `?category=${category}` + `&detail=${sortMethod}` + '&type=sort' + '&searchContent=', {noCORS: true });
     const data = await boardList.json();
-    console.log(data);
+    //console.log(data);
     return data;
 }
+
+async function searchListLoad(){
+    const boardList = await fetch(ServerUrl() + '/boards' + `?category=${searchBoardListType.category}` + `&detail=${searchBoardListType.datailCategory}` + '&type=search' + `&searchContent=${searchBoardListType.searchContent}`, {noCORS: true });
+    const data = await boardList.json();
+   
+    return data;
+}
+
 const setBoardItem = async (boardData) => {
     const boardList = document.querySelector('.boardList');
     if (boardList && boardData) {
@@ -141,6 +161,32 @@ const setBoardItem = async (boardData) => {
             .join('');
     }
 };
+
+//----------------------------------검색기능 구현--------------------------------------------------//
+
+async function setSearchboard(){
+    searchBoardListType.searchContent = searchContent.value;
+    const searchList = await searchListLoad();
+    console.log(searchList);
+    await setBoardItem(searchList);
+}
+
+const searchContent = document.querySelector('.searchInput');
+searchCheck.addEventListener("change", async() => {
+    selectButtons.disabled = searchCheck.checked ? true:false;
+    selectButtons.style.display = searchCheck.checked ? "none":"block";
+    if (searchCheck.checked){
+        await setSearchboard();
+    } else{
+        await newSetboards();
+    }
+});
+
+searchContent.addEventListener("input", async() => {
+    if (searchCheck.checked){
+        await setSearchboard();
+    }
+});
 
 //--------------------------------세션 유무에 따라 보이는 버튼 다르게-----------------------------//
 
@@ -168,6 +214,7 @@ function setShowButton(data){
     }
     document.querySelector('.changeStatus').style.display = 'flex';
 }
+
 
 setBoardItem(boardList);
 changeStatus(statusButton);

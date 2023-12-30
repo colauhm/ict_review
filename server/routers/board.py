@@ -85,53 +85,83 @@ async def addBoard(data: AddBoard, session: Annotated[str, Header()] = None):
     return 200, {'message': res[0]['id']}
 
 @router.get("/boards")
-async def getBoards(category:str, sortType:str):
-    
-    boards = await execute_sql_query(f"""
-        SELECT
-            b.id AS boardId,
-            b.title AS boardTitle,
-            b.createdAt AS boardCreatedAt,
-            b.writerId AS boardWriterId,
-            b.viewCount AS boardViewCount,
-            b.recommendCount AS boardRecommendCount,
-            b.commentCount AS boardcommentCount,   
-            b.type AS boardType,                      
-            u.nickname AS userNickname
-        FROM
-            board AS b
-        LEFT JOIN
-            user AS u
-        ON
-            b.writerId = u.idx
-        WHERE
-            b.type = %s
-        ORDER BY
-            {sortType} DESC;
-        """,(category,))
-    if boards:
-        print("""
-        SELECT
-            b.id AS boardId,
-            b.title AS boardTitle,
-            b.createdAt AS boardCreatedAt,
-            b.writerId AS boardWriterId,
-            b.viewCount AS boardViewCount,
-            b.recommendCount AS boardRecommendCount,
-            b.commentCount AS boardcommentCount,   
-            b.type AS boardType,                      
-            u.nickname AS userNickname
-        FROM
-            board AS b
-        LEFT JOIN
-            user AS u
-        ON
-            b.writerId = u.idx
-        WHERE
-            b.type = %s
-        ORDER BY
-            %s DESC;
-        """,(category,sortType,))
+async def getBoards(category:str, detail:str, type:str, searchContent:Optional[str]):
+    if type == 'sort':
+        boards = await execute_sql_query(f"""
+            SELECT
+                b.id AS boardId,
+                b.title AS boardTitle,
+                b.createdAt AS boardCreatedAt,
+                b.writerId AS boardWriterId,
+                b.viewCount AS boardViewCount,
+                b.recommendCount AS boardRecommendCount,
+                b.commentCount AS boardcommentCount,   
+                b.type AS boardType,                      
+                u.nickname AS userNickname
+            FROM
+                board AS b
+            LEFT JOIN
+                user AS u
+            ON
+                b.writerId = u.idx
+            WHERE
+                b.type = %s
+            ORDER BY
+                {detail} DESC;
+            """,(category,))
+    else:
+        if len(searchContent) == 0:
+            return []
+        if category == 'all':
+            boards = await execute_sql_query(f"""
+                SELECT
+                    b.id AS boardId,
+                    b.title AS boardTitle,
+                    b.content AS boardContent,
+                    b.createdAt AS boardCreatedAt,
+                    b.writerId AS boardWriterId,
+                    b.viewCount AS boardViewCount,
+                    b.recommendCount AS boardRecommendCount,
+                    b.commentCount AS boardcommentCount,   
+                    b.type AS boardType,                      
+                    u.nickname AS userNickname
+                FROM
+                    board AS b
+                LEFT JOIN
+                    user AS u 
+                ON
+                    b.writerId = u.idx
+                WHERE
+                    {detail} LIKE CONCAT('%%', %s ,'%%')
+                    AND b.type <> 'secretQnA'
+                ORDER BY
+                    boardCreatedAt DESC;
+                """,(searchContent,))
+        else:
+            boards = await execute_sql_query(f"""
+                SELECT
+                    b.id AS boardId,
+                    b.title AS boardTitle,
+                    b.content AS boardContent,
+                    b.createdAt AS boardCreatedAt,
+                    b.writerId AS boardWriterId,
+                    b.viewCount AS boardViewCount,
+                    b.recommendCount AS boardRecommendCount,
+                    b.commentCount AS boardcommentCount,   
+                    b.type AS boardType,                      
+                    u.nickname AS userNickname
+                FROM
+                    board AS b
+                LEFT JOIN
+                    user AS u 
+                ON
+                    b.writerId = u.idx
+                WHERE
+                    b.type = %s AND {detail} LIKE CONCAT('%%', %s ,'%%') 
+                    AND b.type <> 'secretQnA'
+                ORDER BY
+                    boardCreatedAt DESC;
+                """,(category,searchContent,))
     return boards
 
 @router.get("/board")
