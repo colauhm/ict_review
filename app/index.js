@@ -1,10 +1,9 @@
-import { checkInfo, authCheck, ServerUrl, serverSessionCheck, deleteCookie } from './utils/function.js';
+import { checkInfo, authCheck, ServerUrl, deleteCookie } from './utils/function.js';
 import { BoardItem } from './components/boardItem.js';
 
 const searchButtons = document.querySelector('.searchButtons');
 const searchCheck = document.getElementById('searchCheck');
 const selectButtons = document.querySelector('.seclectButtons');
-const searchType = document.querySelector(".searchType");
 const requestBoardListType = {
     category : 'notice',
     sortMethod : 'boardCreatedAt'

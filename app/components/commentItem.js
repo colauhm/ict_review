@@ -33,7 +33,6 @@ export const commentItem = (commentIdx, date, commentWriter, content, commentWri
                 <p class="date">${dateTimeStr}</p>
             </div>
             <div>
-                <button class="edit" name="commentChange" id="${commentIdx}">수정</button>
                 <button class="edit" name="commentDelect" id ="${commentIdx}">삭제</button>
             </div>
         </div>
