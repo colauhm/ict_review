@@ -99,3 +99,10 @@ export async function checkInfo(boardType){
     return await authCheck();
 }
 
+export async function getBoard(boardId) {
+    //console.log(boardId);
+    const components = await fetch(ServerUrl() + '/board' + `?boardId=${boardId}`, { headers: {session: getCookie('session')}});
+    const data = await components.json();
+    //console.log(data);
+    return data;
+}

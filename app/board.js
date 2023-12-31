@@ -1,4 +1,4 @@
-import { checkInfo, ServerUrl, getCookie, getUrlId, serverSessionCheck} from './utils/function.js';
+import { checkInfo, ServerUrl, getCookie, getUrlId, serverSessionCheck, getBoard} from './utils/function.js';
 import { commentItem } from './components/commentItem.js';
 
 
@@ -37,10 +37,10 @@ if (await serverSessionCheck()){recordStatus(boardId, 'time', null);}
 const boardData = await getBoard(boardId);
 const boardType = boardData[0]['type'];
 const myInfo = await checkInfo(boardType)
-const checkBoardWriter = myInfo.idx == boardData[0]['writerId'];
+const checkBoardWriter = myInfo.idx == boardData[0]['writerId'] || myInfo.power;
 const commentList = await getComment(false);
 
-
+console.log(checkBoardWriter);
 async function setNewRecommendCountData(){
     const newBoardData =  await getBoard(boardId);
     showElement.recommendCountData.innerHTML = newBoardData[0]['recommendCount']; 
@@ -67,13 +67,6 @@ async function recordStatus(boardId, recordType, recommend){
     });
 }
 
-async function getBoard(boardId) {
-    //console.log(boardId);
-    const components = await fetch(ServerUrl() + '/board' + `?boardId=${boardId}`, { headers: {session: getCookie('session')}});
-    const data = await components.json();
-    //console.log(data);
-    return data;
-}
 
 
 async function addComment(){
@@ -209,6 +202,13 @@ async function boardEditButtonSet(){
     }
 }
 
+boardEdit.boardEditButton.addEventListener("click", () => {
+    const result = window.confirm('게시글을 수정하시겠습니까?');
+    if (result){
+        alert('게시글 수정페이지로 이동합니다.');
+        window.location.href = `/modifyboard.html?id=${boardId}`
+    } 
+});
 
 await showElementCheck(boardType);
 await setComment(commentList);

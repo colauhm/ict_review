@@ -11,6 +11,8 @@ const boardComponent = {
     type : '',
     fileName: '',
     filePath: '',
+    modify:false,
+    boardId:null
 }
 
 const selectBoardButton = document.querySelector('.selectBoardButton');
@@ -113,18 +115,14 @@ function getWriteData() {
 }
 
 const fileInput = document.getElementById('fileInput');
-
 const fileUploadButton = document.getElementById('fileUpload');
-
 fileUploadButton.addEventListener('click', function() {
     // 파일이 선택되었는지 확인
     if (fileInput.files.length > 0) {
         // FormData 객체 생성
         const formData = new FormData();
-
         // 파일 추가
         formData.append('file', fileInput.files[0]);
-
         // 서버로 파일 업로드 요청
         uploadFile(formData);
     } else {

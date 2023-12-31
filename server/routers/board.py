@@ -9,9 +9,11 @@ from datetime import datetime, timedelta
 class AddBoard(BaseModel):
     title : str
     content : str
-    type : str
+    type : Optional[str]
     fileName : Optional[str]
     filePath : Optional[str]
+    modify : bool
+    boardId : Optional[int]
 
 class modifyBoard(BaseModel):
     id: int
@@ -70,17 +72,20 @@ async def recordData(data:RecordData, session: Annotated[str, Header()] = None):
 
 @router.post("/board")
 async def addBoard(data: AddBoard, session: Annotated[str, Header()] = None):
-    
     info = await getSessionData(session)
     today = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    #print(data.title, data.content, today, 0, 0, 0, data.fileName, data.filePath, data.type)
-    # 게시글 추가 로직 board 테이블에 게시글을 추가한다.
+    print(data)
+    if data.modify:
+        await execute_sql_query("""
+                UPDATE board
+                SET title = %s, content = %s, updatedAt = %s, fileName = %s, filePath = %s
+                WHERE id = %s;
+            """, (data.title, data.content, today, data.fileName, data.filePath, data.boardId,))
+        return
     res = await execute_sql_query("""INSERT INTO board (title, content, createdAt, viewCount, recommendCount, commentCount, fileName, filePath, type, writerId) 
-                                                                                                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", 
-                                                                            (data.title, data.content, today, 0, 0, 0, data.fileName, data.filePath, data.type, info.idx,))
-    # 게시글 마지막 idx 조회
+                                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", 
+                                    (data.title, data.content, today, 0, 0, 0, data.fileName, data.filePath, data.type, info.idx,))
     res = await execute_sql_query("SELECT MAX(id) AS id FROM board")
-
     # print(res)
     return 200, {'message': res[0]['id']}
 
