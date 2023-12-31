@@ -1,4 +1,4 @@
-import { authCheck, getCookie, getQueryString, ServerUrl } from './utils/function.js';
+import { authCheck, getCookie, ServerUrl } from './utils/function.js';
 
 const boardInputdata = {
     title :  document.getElementById('title'),
