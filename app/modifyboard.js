@@ -2,7 +2,7 @@
 import{getUrlId, getBoard, authCheck, ServerUrl, getCookie} from './utils/function.js';
 
 const boardId = getUrlId();
-const originalContnet = await getBoard(boardId);
+const originalContnet = await getBoard(boardId, false);
 const myInfo = await authCheck();
 console.log(myInfo)
 console.log(originalContnet[0])
@@ -30,7 +30,7 @@ const boardInputdata = {
     type : '',
     fileName : '',
     filePath : '',
-    updateType : true,
+    updateType : 'modify',
     boardId : boardId
 }
 
@@ -86,7 +86,7 @@ function modifyOrCancel(){
     const buttonId = this.id;
     if (buttonId == 'cancel'){
         alert('수정취소 이전페이지로 이동합니다.')
-        window.location.href = "/";
+        window.location.href = `/board.html?id=${boardId}`;
     } else if (boardInputdata.title && boardInputdata.content) {
         updateBoard();
         alert('수정완료 이전페이지로 이동합니다.');

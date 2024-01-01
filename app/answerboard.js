@@ -2,7 +2,7 @@
 import{getUrlId, getBoard, authCheck, ServerUrl, getCookie} from './utils/function.js';
 
 const boardId = getUrlId();
-const originalContnet = await getBoard(boardId);
+const originalContnet = await getBoard(boardId, false);
 const myInfo = await authCheck();
 console.log(myInfo)
 console.log(originalContnet[0])

@@ -221,7 +221,8 @@ async def getBoard(boardId: int,answer:bool, session: str = Header(default=None)
                     u.nickname AS writerNickname,
                     b.type,
                     b.writerId,
-                    s.recommendStatus
+                    s.recommendStatus,
+                    b.answer
                 FROM 
                     board AS b
                 JOIN 
@@ -245,7 +246,8 @@ async def getBoard(boardId: int,answer:bool, session: str = Header(default=None)
                     u.nickname AS writerNickname,
                     b.type,
                     b.writerId,
-                    s.recommendStatus
+                    s.recommendStatus,
+                    b.answer
                 FROM 
                     board AS b
                 JOIN 
@@ -268,7 +270,8 @@ async def getBoard(boardId: int,answer:bool, session: str = Header(default=None)
             b.filePath,
             u.nickname AS writerNickname,
             b.type,
-            b.writerId
+            b.writerId,
+            b.answer
         FROM 
             board AS b
         JOIN 
