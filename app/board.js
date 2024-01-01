@@ -196,6 +196,16 @@ async function showElementCheck(boardType){
     showElement.recommendCountData.innerHTML = boardData[0]['recommendCount'];
 }
 
+async function getFile(){
+    if (boardData[0]['fileName'] && boardData[0]['filePath']){
+        const fileDownloadLink = document.querySelector('.fileDownloadLink');
+        fileDownloadLink.innerHTML = `<a href="${ServerUrl()}/download/${boardId}" download>${boardData[0]['fileName']}</a>`
+    }
+
+    
+    
+}
+
 showElement.recommendCheckBox.addEventListener('change', async () => {
     const isChecked = showElement.recommendCheckBox.checked;
     const recommendValue = isChecked ? true : false;
@@ -270,3 +280,4 @@ await commentEditButton();
 await boardEditButtonSet();
 await clickDelectBoardButton();
 await clickEditBoardButton();
+await getFile();

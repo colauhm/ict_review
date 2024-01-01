@@ -1,5 +1,7 @@
-import { authCheck, getCookie, ServerUrl } from './utils/function.js';
+import { authCheck, getCookie, ServerUrl ,getBoard} from './utils/function.js';
 
+const boardId = await getBoardId() + 1;
+console.log(boardId)
 const boardInputdata = {
     title :  document.getElementById('title'),
     content : document.getElementById('content')
@@ -76,6 +78,12 @@ function QnAcheck(boardType){
 
     
 }
+
+async function getBoardId(){
+    const response = await fetch(ServerUrl() + '/boardNum', {noCORS: true});
+    const data = await response.json();
+    return data;
+}
 //-----------------------------------게시글 유형 선택-------------------------------------------//
 
 setupButtons(boardCategory, boardComponent, 'type');
@@ -131,7 +139,7 @@ fileUploadButton.addEventListener('click', function() {
 });
 async function uploadFile(formData) {
     try {
-        const response = await fetch(ServerUrl() + '/upload', {
+        const response = await fetch(ServerUrl() + '/upload'+`/${boardId}`, {
             method: 'POST',
             body: formData
         });

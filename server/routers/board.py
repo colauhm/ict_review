@@ -296,3 +296,9 @@ async def deleteBoard(id: str, session: Annotated[str, Header()] = None):
         return 401, {'message': '삭제 권한이 없습니다.'}
     else:
         return 200, {'message': '삭제되었습니다.'}
+    
+@router.get("/boardNum")
+async def getBoardNum():
+    res = await execute_sql_query("SELECT MAX(id) FROM board;")
+    print(res)
+    return res[0]["MAX(id)"] 

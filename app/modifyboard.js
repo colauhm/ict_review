@@ -51,7 +51,7 @@ fileUploadButton.addEventListener('click', function() {
 });
 async function uploadFile(formData) {
     try {
-        const response = await fetch(ServerUrl() + '/upload', {
+        const response = await fetch(ServerUrl() + '/upload' + `/${boardId}`, {
             method: 'POST',
             body: formData
         });
