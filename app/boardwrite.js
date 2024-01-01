@@ -11,7 +11,7 @@ const boardComponent = {
     type : '',
     fileName: '',
     filePath: '',
-    modify:false,
+    updateType:'',
     boardId:null
 }
 

@@ -37,7 +37,7 @@ if (await serverSessionCheck()){recordStatus(boardId, 'time', null);}
 const boardData = await getBoard(boardId);
 const boardType = boardData[0]['type'];
 const myInfo = await checkInfo(boardType)
-const checkBoardWriter = myInfo.idx == boardData[0]['writerId'] || myInfo.power;
+const checkBoardWriter = (myInfo.idx == boardData[0]['writerId']);
 const commentList = await getComment(false);
 
 console.log(checkBoardWriter);
@@ -197,9 +197,27 @@ boardEdit.boardDeleteButton.addEventListener('click', () => {
 });
 
 async function boardEditButtonSet(){
-    if (!(checkBoardWriter /*&&답글이 안달렸다면*/)){
-        boardEdit.boardChangeButtons.innerHTML = ""
+    if (myInfo.power){
+        boardEdit.boardEditButton.style.display = "none";
+        if (boardType == 'QnA' || boardType == 'secretQnA'){
+            boardEdit.boardChangeButtons.innerHTML += `<button id="QnAAnswer">답글</button>`;
+            writeQnAAnswer();
+        }
     }
+    else if (!(checkBoardWriter /*&&답글이 안달렸다면*/)){
+        boardEdit.boardChangeButtons.innerHTML = "";
+    }
+}
+
+function writeQnAAnswer(){
+    const QnAAnswer = document.getElementById('QnAAnswer');
+    QnAAnswer.addEventListener("click", ()=> {
+        const result = window.confirm('답변을 작성하시겠습니까?');
+        if (result){
+            alert('답변 작성 사이트로 이동합니다.')
+            window.location.href = `/answerboard.html?id=${boardId}`
+        }
+    });
 }
 
 boardEdit.boardEditButton.addEventListener("click", () => {

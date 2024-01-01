@@ -1,5 +1,5 @@
 import { checkInfo, authCheck, ServerUrl, deleteCookie } from './utils/function.js';
-import { BoardItem } from './components/boardItem.js';
+import { BoardItem, AnswerItem } from './components/boardItem.js';
 
 const searchButtons = document.querySelector('.searchButtons');
 const searchCheck = document.getElementById('searchCheck');
@@ -59,6 +59,8 @@ console.log(boardList);
 async function newSetboards(){
     const newBoardList = await boardListLoad();
     await setBoardItem(newBoardList);
+    answerCheck(newBoardList);
+    //console.log(newBoardList);
 }
 
 async function setDisabledButton(){
@@ -73,6 +75,7 @@ function setupButtons(typeButton, listType, methodKey) {
     Object.values(typeButton).forEach(button => {
         button.addEventListener('click', async () => {
             const selectedButtonName = await typeChoice(button, typeButton);
+            
             console.log(selectedButtonName, searchCheck.checked);
             if(searchCheck.checked){
                 if (typeButton == searchDetailTypebutton){
@@ -155,11 +158,32 @@ const setBoardItem = async (boardData) => {
     if (boardList && boardData) {
         boardList.innerHTML = boardData
             .map((data) => {
-                return BoardItem(data.boardId, data.boardCreatedAt, data.boardTitle, data.boardViewCount, data.boardRecommendCount, data.userNickname, data.boardType, myInfo.power, myInfo.nickname);
+                if(!data.answer){
+                    return BoardItem(data.boardId, data.boardCreatedAt, data.boardTitle, data.boardViewCount, data.boardRecommendCount, data.userNickname, data.boardType, myInfo.power, myInfo.nickname);
+                }
             })
             .join('');
     }
 };
+
+function setAnswerItem(boardData, id) {
+    console.log(boardData);
+    const answerList = document.getElementById(`answer${id}`);
+    console.log(answerList);
+    if (answerList && boardData) {
+        console.log(boardData);
+        answerList.innerHTML += AnswerItem(boardData.boardId, boardData.boardCreatedAt, boardData.boardTitle, boardData.boardViewCount, boardData.userNickname, boardData.boardType, myInfo.power, myInfo.nickname);
+    }
+}
+function answerCheck(boardData){
+    //console.log(boardData);
+    boardData.forEach(function(data) {
+        if (data.answer) {
+            console.log(data.answer)
+            setAnswerItem(data, data.answer);
+        }
+    });
+}
 
 //----------------------------------검색기능 구현--------------------------------------------------//
 
@@ -168,6 +192,7 @@ async function setSearchboard(){
     const searchList = await searchListLoad();
     console.log(searchList);
     await setBoardItem(searchList);
+    answerCheck(searchList);
 }
 
 const searchContent = document.querySelector('.searchInput');
@@ -204,7 +229,7 @@ function changeStatus(allButtons){
 }
 
 function setShowButton(data){
-    console.log(data);
+    //console.log(data);
     statusButton.login.style.display = data? 'none':'block';
     statusButton.signup.style.display = data? 'none':'block';
     statusButton.logout.style.display = data? 'block':'none';

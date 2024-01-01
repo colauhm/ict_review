@@ -12,15 +12,9 @@ class AddBoard(BaseModel):
     type : Optional[str]
     fileName : Optional[str]
     filePath : Optional[str]
-    modify : bool
+    updateType : Optional[str]
     boardId : Optional[int]
 
-class modifyBoard(BaseModel):
-    id: int
-    title: str
-    content: str
-    fileName : Optional[str]
-    filePath : Optional[str]
 
 class RecordData(BaseModel):
     recordType : str
@@ -75,12 +69,28 @@ async def addBoard(data: AddBoard, session: Annotated[str, Header()] = None):
     info = await getSessionData(session)
     today = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     print(data)
-    if data.modify:
+    if data.updateType == 'modify':
         await execute_sql_query("""
                 UPDATE board
                 SET title = %s, content = %s, updatedAt = %s, fileName = %s, filePath = %s
                 WHERE id = %s;
             """, (data.title, data.content, today, data.fileName, data.filePath, data.boardId,))
+        return
+    elif data.updateType == 'answer':
+        await execute_sql_query("""INSERT INTO board (title, content, createdAt, viewCount, fileName, filePath, type, writerId, answer) 
+                                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)""", 
+                                    (data.title, data.content, today, 0, data.fileName, data.filePath, data.type, info.idx, data.boardId,))
+        answerCount =  await execute_sql_query("""
+                            SELECT COUNT(*) AS answerCount
+                            FROM board
+                            WHERE answer IS NOT NULL AND answer <> '';
+                            """)
+        print(answerCount)
+        await execute_sql_query("""
+                UPDATE board
+                SET answerCount = %s
+                WHERE id = %s;""", (answerCount[0]['answerCount'],data.boardId,))
+       
         return
     res = await execute_sql_query("""INSERT INTO board (title, content, createdAt, viewCount, recommendCount, commentCount, fileName, filePath, type, writerId) 
                                     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", 
@@ -102,7 +112,8 @@ async def getBoards(category:str, detail:str, type:str, searchContent:Optional[s
                 b.recommendCount AS boardRecommendCount,
                 b.commentCount AS boardcommentCount,   
                 b.type AS boardType,                      
-                u.nickname AS userNickname
+                u.nickname AS userNickname,
+                b.answer
             FROM
                 board AS b
             LEFT JOIN
@@ -129,7 +140,8 @@ async def getBoards(category:str, detail:str, type:str, searchContent:Optional[s
                     b.recommendCount AS boardRecommendCount,
                     b.commentCount AS boardcommentCount,   
                     b.type AS boardType,                      
-                    u.nickname AS userNickname
+                    u.nickname AS userNickname,
+                    b.answer
                 FROM
                     board AS b
                 LEFT JOIN
@@ -154,7 +166,8 @@ async def getBoards(category:str, detail:str, type:str, searchContent:Optional[s
                     b.recommendCount AS boardRecommendCount,
                     b.commentCount AS boardcommentCount,   
                     b.type AS boardType,                      
-                    u.nickname AS userNickname
+                    u.nickname AS userNickname,
+                    b.answer
                 FROM
                     board AS b
                 LEFT JOIN
@@ -166,7 +179,8 @@ async def getBoards(category:str, detail:str, type:str, searchContent:Optional[s
                     AND b.type <> 'secretQnA'
                 ORDER BY
                     boardCreatedAt DESC;
-                """,(category,searchContent,))
+                """, (category, searchContent,))
+
     return boards
 
 @router.get("/board")

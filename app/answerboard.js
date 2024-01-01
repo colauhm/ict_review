@@ -8,7 +8,7 @@ console.log(myInfo)
 console.log(originalContnet[0])
 
 function writerCheck (){
-    if (myInfo.idx != originalContnet[0]["writerId"]){
+    if (!myInfo.power){
         alert("허용되지 않은 접근입니다.");
         window.location.href = "/"
     }
@@ -19,8 +19,8 @@ const boardComponent = {
     content : document.getElementById('content')
 }
 
-const modifyRequestButton = {
-    modify : document.getElementById('modify'),
+const answerRequestButton = {
+    answer : document.getElementById('answer'),
     cancel : document.getElementById('cancel')
 }
 
@@ -30,7 +30,7 @@ const boardInputdata = {
     type : '',
     fileName : '',
     filePath : '',
-    updateType : true,
+    updateType : "answer",
     boardId : boardId
 }
 
@@ -68,28 +68,24 @@ async function uploadFile(formData) {
     }
 }
 
-function setOriginalContnet(){
-    boardComponent.title.value = originalContnet[0]['title'];
-    boardComponent.content.value = originalContnet[0]['content'];
-}
-
 function getWriteData(){
     boardInputdata.title = boardComponent.title.value;
     boardInputdata.content = boardComponent.content.value;
+    boardInputdata.type = originalContnet[0]['type'];
 }
 
-Object.values(modifyRequestButton).forEach(buttonElement => {
-    buttonElement.addEventListener('click',modifyOrCancel);
+Object.values(answerRequestButton).forEach(buttonElement => {
+    buttonElement.addEventListener('click',answerOrCancel);
 });
-function modifyOrCancel(){
+function answerOrCancel(){
     getWriteData();
     const buttonId = this.id;
     if (buttonId == 'cancel'){
-        alert('수정취소 이전페이지로 이동합니다.')
+        alert('작성취소 이전페이지로 이동합니다.')
         window.location.href = "/";
     } else if (boardInputdata.title && boardInputdata.content) {
         updateBoard();
-        alert('수정완료 이전페이지로 이동합니다.');
+        alert('작성완료 이전페이지로 이동합니다.');
         window.location.href = `/board.html?id=${boardId}`;
     } else {
         alert('필요내용을 전부 작성하지 않았습니다.');
@@ -114,4 +110,3 @@ async function updateBoard(){
 }
 
 writerCheck();
-setOriginalContnet();

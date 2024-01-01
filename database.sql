@@ -24,6 +24,8 @@ CREATE TABLE board (
 	type      		VARCHAR(255) DEFAULT NULL,
 	fileName  		VARCHAR(255) DEFAULT NULL,
 	filePath  		VARCHAR(255) DEFAULT NULL,
+    answer VARCHAR(255) DEFAULT NULL,
+	answerCount		INT DEFAULT NULL,
 	PRIMARY KEY (id)
 );
 CREATE TABLE comment ( 
