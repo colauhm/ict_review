@@ -1,6 +1,6 @@
 import { checkInfo, ServerUrl, getCookie, getUrlId, serverSessionCheck, getBoard} from './utils/function.js';
 import { commentItem } from './components/commentItem.js';
-
+import {AnswerItem} from './components/boardItem.js';
 
 const boardId = getUrlId();
 
@@ -32,9 +32,11 @@ const boardEdit = {
     boardDeleteButton :document.getElementById('deleteButton')
 }
 
+
 if (await serverSessionCheck()){recordStatus(boardId, 'time', null);}
 
-const boardData = await getBoard(boardId);
+const answerData = await getBoard(boardId, true);
+const boardData = await getBoard(boardId, false);
 const boardType = boardData[0]['type'];
 const myInfo = await checkInfo(boardType)
 const checkBoardWriter = (myInfo.idx == boardData[0]['writerId']);
@@ -42,7 +44,7 @@ const commentList = await getComment(false);
 
 console.log(checkBoardWriter);
 async function setNewRecommendCountData(){
-    const newBoardData =  await getBoard(boardId);
+    const newBoardData =  await getBoard(boardId, false);
     showElement.recommendCountData.innerHTML = newBoardData[0]['recommendCount']; 
 } 
 
@@ -127,6 +129,18 @@ async function getSelectButton(){
     return document.querySelectorAll('.edit');
 }
 
+const setAnswer = (answerData) => {
+    const answerList = document.querySelector('.answerList');
+    boardId
+    if (answerList && answerData) {
+        console.log(answerData);
+        answerList.innerHTML = answerData
+            .map((data) => {
+                return AnswerItem(data.boardId, data.createdAt, data.title, data.viewCount, data.writerNickname, data.type, myInfo.power, myInfo.nickname);
+            })
+            .join('');
+    }
+};
 showElement.addCommentButton.addEventListener('click', async () => {
     await addComment();
     alert('댓글이 작성되었습니다.');
@@ -172,9 +186,10 @@ async function displayElement(boardType){
 
 async function showElementCheck(boardType){ 
     displayElement(boardType);
+    
     showElement.viewCountData.innerHTML = boardData[0]['viewCount']; 
     showElement.commentCountData.innerHTML = boardData[0]['commentCount'];
-    showElement.recommendCountData.innerHTML = boardData[0]['recommendCount']; 
+    showElement.recommendCountData.innerHTML = boardData[0]['recommendCount'];
 }
 
 showElement.recommendCheckBox.addEventListener('change', async () => {
@@ -197,16 +212,40 @@ boardEdit.boardDeleteButton.addEventListener('click', () => {
 });
 
 async function boardEditButtonSet(){
-    if (myInfo.power){
-        boardEdit.boardEditButton.style.display = "none";
-        if (boardType == 'QnA' || boardType == 'secretQnA'){
+    console.log(checkBoardWriter, answerData)
+    if (boardType === 'QnA' || boardType === 'secretQnA') {
+        if (myInfo.power) {
             boardEdit.boardChangeButtons.innerHTML += `<button id="QnAAnswer">답글</button>`;
             writeQnAAnswer();
+            if(answerData){
+                console.log(boardEdit.boardEditButton);
+                boardEdit.boardEditButton.disable = true;
+
+            }
+        } else if (answerData || !checkBoardWriter) {
+             boardEdit.boardEditButton.disable = true;
+             
+            if (!checkBoardWriter) {
+                boardEdit.boardChangeButtons.innerHTML = "";
+            }
+        }
+        
+    } 
+    else if ('notice'){
+        if (!myInfo.power) {
+            boardEdit.boardChangeButtons.innerHTML = "";
         }
     }
-    else if (!(checkBoardWriter /*&&답글이 안달렸다면*/)){
-        boardEdit.boardChangeButtons.innerHTML = "";
+    else {
+        if(myInfo.power && !checkBoardWriter){
+            boardEdit.boardEditButton.style.display = "none";
+        }
+        else if (!checkBoardWriter){
+            boardEdit.boardChangeButtons.innerHTML = "";
+        }
     }
+    
+    
 }
 
 function writeQnAAnswer(){
@@ -232,3 +271,4 @@ await showElementCheck(boardType);
 await setComment(commentList);
 await commentEditButton();
 await boardEditButtonSet();
+setAnswer(answerData);

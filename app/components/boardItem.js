@@ -23,6 +23,8 @@ export const BoardItem = (id, date, title, views, recommeds, writerNickname, boa
                 <div class="boardItem">
                     <h2 class="title">비밀글 입니다.</h2>
                 </div>
+                <ol id="answer${id}">
+                </ol>
             </a>
         `;
     }
@@ -65,7 +67,7 @@ export const BoardItem = (id, date, title, views, recommeds, writerNickname, boa
 };
 
 export const AnswerItem = (id, date, title, views, writerNickname, boardType,  userPower, userNickname) => {
-
+    //console.log(id, date, title, views, writerNickname, boardType,  userPower, userNickname);
     const checkPower = userPower ? true: false;
     const dateObj = new Date(date);
     const year = dateObj.getFullYear();

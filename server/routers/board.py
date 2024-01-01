@@ -184,9 +184,10 @@ async def getBoards(category:str, detail:str, type:str, searchContent:Optional[s
     return boards
 
 @router.get("/board")
-async def getBoard(boardId: int, session: str = Header(default=None)):
+async def getBoard(boardId: int,answer:bool, session: str = Header(default=None)):
     info = await getSessionData(session)
     if (info):
+        
         viewCount = await execute_sql_query("SELECT SUM(viewCount) FROM status WHERE boardId = %s;",(boardId,))
         commentCount = await execute_sql_query("SELECT COUNT(*) FROM comment WHERE boardId = %s;",(boardId,))
         recommendCount = await execute_sql_query("SELECT COUNT(*) FROM status WHERE boardId = %s AND recommendStatus = 1;",(boardId,))
@@ -205,30 +206,55 @@ async def getBoard(boardId: int, session: str = Header(default=None)):
                 SET viewCount = %s
                 WHERE id = %s;
             """, (viewCount[0]['SUM(viewCount)'],boardId,))
-        print(viewCount)   
-        board = await execute_sql_query("""
-        SELECT 
-                b.title,
-                b.content,
-                b.createdAt,
-                b.viewCount,
-                b.recommendCount,
-                b.commentCount,
-                b.fileName,
-                b.filePath,
-                u.nickname AS writerNickname,
-                b.type,
-                b.writerId,
-                s.recommendStatus
-            FROM 
-                board AS b
-            JOIN 
-                user AS u ON b.writerId = u.idx
-            LEFT JOIN
-                status AS s ON b.id = s.boardId
-            WHERE 
-                b.id = %s AND s.userId = %s;
-            """, (boardId, info.idx,))
+        if(answer):
+            board = await execute_sql_query("""
+            SELECT 
+                    b.title,
+                    b.id AS boardId,
+                    b.content,
+                    b.createdAt,
+                    b.viewCount,
+                    b.recommendCount,
+                    b.commentCount,
+                    b.fileName,
+                    b.filePath,
+                    u.nickname AS writerNickname,
+                    b.type,
+                    b.writerId,
+                    s.recommendStatus
+                FROM 
+                    board AS b
+                JOIN 
+                    user AS u ON b.writerId = u.idx
+                LEFT JOIN
+                    status AS s ON b.id = s.boardId
+                WHERE 
+                    b.answer = %s AND s.userId = %s;
+                """, (boardId, info.idx,))
+        else:
+            board = await execute_sql_query("""
+            SELECT 
+                    b.title,
+                    b.content,
+                    b.createdAt,
+                    b.viewCount,
+                    b.recommendCount,
+                    b.commentCount,
+                    b.fileName,
+                    b.filePath,
+                    u.nickname AS writerNickname,
+                    b.type,
+                    b.writerId,
+                    s.recommendStatus
+                FROM 
+                    board AS b
+                JOIN 
+                    user AS u ON b.writerId = u.idx
+                LEFT JOIN
+                    status AS s ON b.id = s.boardId
+                WHERE 
+                    b.id = %s AND s.userId = %s;
+                """, (boardId, info.idx,))
     else:
         board = await execute_sql_query("""
         SELECT 

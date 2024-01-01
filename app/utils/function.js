@@ -99,9 +99,9 @@ export async function checkInfo(boardType){
     return await authCheck();
 }
 
-export async function getBoard(boardId) {
+export async function getBoard(boardId, answer) {
     //console.log(boardId);
-    const components = await fetch(ServerUrl() + '/board' + `?boardId=${boardId}`, { headers: {session: getCookie('session')}});
+    const components = await fetch(ServerUrl() + '/board' + `?boardId=${boardId}&answer=${answer}`, { headers: {session: getCookie('session')}});
     const data = await components.json();
     //console.log(data);
     return data;
