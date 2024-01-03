@@ -11,32 +11,38 @@
         <title>main</title>
     </head>
     <body>
-        <a href="/fetch.html">패치노트</a>
-        <h1>main page</h1>
-        <div class="changeStatus">
-            <button id="login">로그인 하러가기</button>
-            <button id="signup">회원가입 하러가기</button>
-            <button id="logout">로그아웃</button>
-        </div>
-        <section class="seclectButtons">
-            <div class="selectBoardButtons">
-                <button class="selectBoardButton" name="notice" id="noticeSelector">공지사항</button>
-                <button class="selectBoardButton" name="free" id="freeBoardSelector">자유게시판</button>
-                <button class="selectBoardButton" name="QnA" id="QnABoardSelector">QnA게시판</button>
-                <div class="secretQnABoardSelector">
-                    <button class="selectBoardButton" id="secretTypeButton">비밀글</button>
-                    <input class="selectBoardButton" type="checkbox" id="secretCheckBox">
-                    
+        <section class="select">
+
+        
+            <div class="topBar">
+                <h1>main page</h1>
+                <a href="/fetch.html">패치노트</a>
+                <div class="changeStatus">
+                    <button id="login">로그인</button>
+                    <button id="signup">회원가입</button>
+                    <button id="logout">로그아웃</button>
                 </div>
             </div>
-            <div class="selectSortButton">
-                <button name="boardCreatedAt" id="recentSorter">최신</button>
-                <button name="boardViewCount" id="viewSorter">조회수</button>
-                <button name="boardRecommendCount" id="recommendSorter">추천</button>
-            </div>
+            
+            <section class="seclectButtons">
+                <div class="selectBoardButtons">
+                    <button class="selectBoardButton" name="notice" id="noticeSelector">공지사항</button>
+                    <button class="selectBoardButton" name="free" id="freeBoardSelector">자유게시판</button>
+                    <button class="selectBoardButton" name="QnA" id="QnABoardSelector">QnA게시판</button>
+                    <section class="secretQnABoardSelector">
+                        <button class="selectBoardButton" id="secretTypeButton">비밀글</button>
+                        <input class="selectBoardButton" type="checkbox" id="secretCheckBox">
+                        <label for="secretCheckBox"></label>
+                    </section>
+                </div>
+                <div class="selectSortButton">
+                    <button name="boardCreatedAt" id="recentSorter">최신</button>
+                    <button name="boardViewCount" id="viewSorter">조회수</button>
+                    <button name="boardRecommendCount" id="recommendSorter">추천</button>
+                </div>
+            </section>
         </section>
-        
-        <div class="searchButtons">
+        <section class="searchButtons">
             <div class="searchType">
                 <button name="all" id="allSerchButton">전체게시판검색</button>
                 <button name="notice" id="noticeSearchButton">공지사항</button>
@@ -48,11 +54,14 @@
                     <button name="nickname" id="writerSearchButton">작성자</button>
                 </div>
             </div>
-            <input type="text" class="searchInput" placeholder="What can I find for you?">
-            <input type="checkbox" id="searchCheck">
-            <button>검색</button>
+            <div>
+                <input type="text" class="searchInput" placeholder="What can I find for you?">
+                <input type="checkbox" id="searchCheck">
+                <label for="searchCheck">검색</label>
+            </div>
+            
          
-        </div>
+        </section>
         <article>
             <button id="writePost">게시글 작성</button>
             <ol class="boardList">

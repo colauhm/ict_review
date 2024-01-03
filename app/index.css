@@ -1,12 +1,150 @@
-
-.secretQnABoardSelector{
-    display: none;
+body{
+    background-color: #dddddd;
+    width: 100%;
 }
-
 div{
     display: flex;
 }
 
+button {
+    border: none;
+    color: #fff;
+    background-color: black;
+    padding: 10px 20px;
+    cursor: pointer;
+    outline: none;
+    transition: background-color 0.3s ease;
+}
+
+button:hover{
+    color: black;
+    background-color: #bbbbbb;
+}
+button:disabled{
+    color: black;
+    background-color: #bbbbbb;
+}
+a{
+    border: none;
+    color: #fff;
+    padding: 10px 20px;
+    cursor: pointer;
+    outline: none;
+}
+.select{
+    background-color: black;
+}
+.topBar{
+    background-color: black;
+    color: white;
+    justify-content: space-between;
+    align-items: center;
+}
+.topBar button{
+    background-color: black;
+    color: white;
+    border-bottom: 2px solid transparent;
+    transition: border-bottom 0.1s ease;
+}
+.topBar a{
+    background-color: black;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    margin-left: auto;
+    border-bottom: 2px solid transparent;
+    transition: border-bottom 0.4s ease;
+}
+
+.topBar button:hover{
+    border-bottom: 2px solid white;
+}
+.topBar a:hover {
+    border-bottom: 2px solid white; /* 호버 시 흰색 밑줄로 변경 */
+}
+
+.seclectButtons{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.secretQnABoardSelector{
+    display: flex;
+}
+.searchButtons{
+    display: flex;
+    flex-wrap: wrap;
+    background-color: black;
+}
 .changeStatus {
     display: block;
+}
+.boardItem {
+    border: 2px solid;
+    width: 90%;
+}
+.boardList{
+    padding-left: 0%;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    row-gap: 15px;
+    overflow-y: hidden;
+}
+#secretCheckBox {
+    appearance: none;
+    display: none;
+}
+
+#secretCheckBox:checked + label::before {
+    content: 'on'; /* 체크된 경우 "on"으로 변경 */
+    font-size: 16px;
+    margin-right: 4px;
+}
+#secretCheckBox + label::before {
+    content: 'off'; /* 기본적으로 "off"로 설정 */
+    font-size: 16px;
+    margin-right: 4px;
+}
+#secretCheckBox + label {
+    color: white;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 500px) {
+    .selectSortButton{
+        align-items: stretch;
+        width: 100%
+    }
+    .selectBoardButtons{
+        align-items: stretch;
+        width: 100%
+    }
+    .secretQnABoardSelector{
+        justify-content: center;
+    }
+    .searchType {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+    }
+    .DetailSearch{
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+    }
+    .searchType > button {
+        width: 100%;
+    }
+    .selectBoardButtons >button{
+        width: 100%;
+    }
+    .selectSortButton >button{
+        width: 100%;
+    }
+    #writePost{
+        width: 100%;
+    }
 }
