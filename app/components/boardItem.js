@@ -98,13 +98,14 @@ export const AnswerItem = (id, date, title, views, writerNickname, boardType,  u
         <a href="/board.html?id=${id}">
             <div class="boardItem">
                 <h2 class="title">${title}</h2>
+                <div class="writerInfo">
+                    <h2 class="writer">${writerNickname}</h2>
+                </div>
                 <div class="info">
                     <h3 class="views">조회수 <b>${views}</b></h3>
                     <p class="date">${dateTimeStr}</p>
                 </div>
-                <div class="writerInfo">
-                    <h2 class="writer">${writerNickname}</h2>
-                </div>
+                
             </div>
         </a>
     `;  

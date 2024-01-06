@@ -24,18 +24,29 @@ export const commentItem = (commentIdx, date, commentWriter, content, commentWri
             </div>
         </div>
         `;
-    } else{
+    } else if (content != '삭제된 댓글입니다.'){
         return`
         <div class="commentItem" id=${commentIdx}>
             <div class="info">
                 <h2 class="writer">${commentWriter}</h2>
                 <p class="content">${content}</p>
                 <p class="date">${dateTimeStr}</p>
+                
             </div>
-            <div>
-                <button class="edit" name="commentDelect" id ="${commentIdx}">삭제</button>
-            </div>
+            <button class="edit" name="commentDelect" id ="${commentIdx}">삭제</button>
         </div>
         `;
     }    
+    else{
+        return`
+        <div class="commentItem" id=${commentIdx}>
+            <div class="info">
+                <h2 class="writer">${commentWriter}</h2>
+                <p class="content">${content}</p>
+                <p class="date">${dateTimeStr}</p>
+                
+            </div>
+        </div>
+        `;
+    }
 };

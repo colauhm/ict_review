@@ -173,8 +173,8 @@ async function commentEditButton(){
 
 async function displayElement(boardType){
     Object.values(showElement).forEach(element => {
-        if (element instanceof Node && boardType != 'free'){
-            element.innerHTML = "";
+        if (element instanceof Node && boardType != 'free' && element.id != 'viewCountData'){
+            element.style.display = 'none';
         }
     });
     if (boardType == 'QnA' || boardType == 'secretQnA'){

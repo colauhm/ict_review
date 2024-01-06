@@ -1,1 +1,74 @@
 @import url('./index.css');
+h2 {
+    display: flex;
+}
+section{
+    display: grid;
+    justify-content: center;
+}
+ol{
+    padding-left: 0;
+}
+.recommend{
+    justify-content: end;
+}
+.boardChangeButtons, .count{
+    justify-content: end;
+}
+#recommendCheckBox{
+    appearance: none;
+    display: none;
+}
+#recommendCheckBox + label::after{
+    display: flex;
+    cursor: pointer;
+    width: 100%;
+}
+#recommendCheckBox:checked + label{
+    color: black;
+    background-color: #bbbbbb;
+}
+.contentBox{
+    display: grid;
+    border: 1px solid;
+    box-sizing: border-box;
+    
+}
+.content{
+    border: 3px solid;
+    border-radius: 4px;
+    padding: 10px 15px;
+}
+.writeComment{
+    display: block;
+    align-items: stretch;
+}
+.writeComment > button{
+    width: 100%;
+}
+.writeComment >textarea{
+    width: 98.5%;
+}
+.commentItem{
+    width: 100%;
+}
+.info{
+    width: 100%;
+    border: 1px solid;
+    justify-content: space-between; 
+}
+.info button .edit{
+    padding: 5px 5px;
+}
+@media screen and (max-width: 500px){
+    h2{
+        font-size: 14px;
+    }
+    .date{
+        font-size: 10px;
+    }
+    .topInfo{
+        justify-content: space-between;
+    }
+   
+}

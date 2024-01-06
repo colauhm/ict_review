@@ -14,45 +14,50 @@
 
 <body>
     <section>
-        <section>
-            <h1 id="title">제목</h1>
-            <div>
+        <div class="contentBox">
+            
+            <div class="topInfo">
+                <h2 id="title">제목</h1>
                 <h2 id="writerNickname">닉네임 </h2>
                 <h2 id="createdAt">생성일</h3>
-                <h2 class="viewCount">조회수<p id="viewCountData"></p></h2>
-                <h2 class="recommendCount">추천수<p id="recommendCountData"></p></h2>
-                <div class="recommend">
-                    <input type="checkbox" id="recommendCheckBox">
-                    <button id="recommendButton">추천</button>
-                </div> 
             </div>
+            
+            <div class="count">
+                <h2 class="viewCount">조회수<h2 id="viewCountData"></h2></h2>
+                <h2 class="recommendCount">추천수<h2 id="recommendCountData"></h2></h2>
+                <h2 class="commentCount">댓글수<h2 id="commentCountData"></h2></h2>
+            </div>
+            
+            <div class="recommend">
+                <input type="checkbox" id="recommendCheckBox">
+                <label for="recommendCheckBox">추천</label>
+            </div> 
             <div class="boardChangeButtons">
                 <button id="editButton">수정</button>
                 <button id="deleteButton">삭제</button>
                 <button id="QnAAnswer">답글</button>
             </div>
-            <section>
-                <div id="content">
-                    게시글 내용
-                </div>
-                <div class="fileDownloadLink">
-                </div>
-            </section>
+            <div class="content">
+                <h2 id="content"></h2>
+            </div>
             
-            <div class="commentCount">댓글 수<p id="commentCountData"></p></div>
-        </section>
+            <div class="download">
+                <div class="fileDownloadLink"></div>  
+            </div>
+        
         <section class="writeComment">
             <textarea placeholder="댓글을 작성해주세요!" id="comment"></textarea>
             <button id="addComment">댓글 작성</button>
         </section>
+
         <section>
             <ol class="answerList">
             </ol>
             <ol class="commentList">
             </ol>
         </section>
-        
-    </section>
+    </div>
+</section>
     <script src="./board.js" type="module"></script>
 </body>
 
