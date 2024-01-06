@@ -11,35 +11,36 @@
         <title>게시글 작성</title>
     </head>
     <body>
-        <div class="selectBoardButton">
-            <button name="notice" id="noticeSelector">공지사항</button>
-            <button name="free" id="freeBoardSelector">자유게시판</button>
-            <button name="QnA" id="QnABoardSelector">QnA게시판</button>
-            <div class="secretQnABoardSelector">
-               
-                <input type="checkbox" id="secretCheckBox">
-                <label for="secretCheckBox">비밀글</label>
+        <div class="wirteBox">
+            <div class="selectBoardButton">
+                <button name="notice" id="noticeSelector">공지사항</button>
+                <button name="free" id="freeBoardSelector">자유게시판</button>
+                <button name="QnA" id="QnABoardSelector">QnA게시판</button>
+                <div class="secretQnABoardSelector">
+                   
+                    <input type="checkbox" id="secretCheckBox">
+                    <label for="secretCheckBox">비밀글</label>
+                </div>
+                
             </div>
-            
+                
+                    <label for="title">제목</label>
+                    <textarea placeholder="제목을 입력해주세요!" id="title"></textarea>
+                
+                    <label for="content">내용</label>
+                    <textarea placeholder="내용을 입력해주세요!" id="content"></textarea>
+                
+          
+            <form id="fileForm" enctype="multipart/form-data">
+                <input type="file" name="file" id="fileInput">
+                <button type="button" id="fileUpload">파일 업로드</button>
+            </form>
+            <div class="requestBox">
+                <button id="completed">게시글 작성</button>
+                <button id="cancel">취소</button>
+            </div>
         </div>
-        <section>
-            <div>
-                <label for="title">제목</label>
-                <textarea placeholder="제목을 입력해주세요!" id="title"></textarea>
-            </div>
-            <div>
-                <label for="content">내용</label>
-                <textarea placeholder="내용을 입력해주세요!" id="content"></textarea>
-            </div>
-        </section>
-        <form id="fileForm" enctype="multipart/form-data">
-            <input type="file" name="file" id="fileInput">
-            <button type="button" id="fileUpload">파일 업로드</button>
-        </form>
-        <div>
-            <button id="completed">게시글 작성</button>
-            <button id="cancel">취소</button>
-        </div>
+        
 
 
     </body>

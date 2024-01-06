@@ -1,1 +1,44 @@
 @import url('./index.css');
+label{
+    display: flex;
+    justify-content: center;
+}
+textarea#content{
+    height: 300px;
+}
+form#fileForm{
+    display: flex;
+    justify-content: space-between;
+}
+.requestBox{
+    width: 100%;
+}
+.requestBox > button {
+    width: 100%;
+}
+.wirteBox{
+    display: grid;
+    width: 100%;
+    border: 1px solid;
+}
+.selectBoardButton{
+    background-color: black;
+}
+
+@media screen and (max-width: 500px) {
+    #fileUpload{
+        padding: 5px 5px;
+    }
+    .selectBoardButton{
+        align-items: stretch;
+        width: 100%;
+        flex-direction: column;
+    }
+    .selectBoardButton > button {
+        width: 100%;
+    }
+    label{
+        padding: 10px 0;
+    }
+
+}
