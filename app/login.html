@@ -5,24 +5,35 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>login</title>
+        <link 
+        rel="stylesheet" 
+        href="./signlogin.css" 
+        crossorigin="anonymous" />
     </head>
     <body>
         <section>
-            <a href="/fetch.html">패치노트</a>
-            <a href="/">main</a>
-            <h1>login</h1>
+            <div class="topBar">
+                <a href="/fetch.html">패치노트</a>
+                <a href="/">main</a>
+            </div>
+            
+            
             <article>
+                <div class="loginBox">
+                <h1>login</h1>
                 <div class="inputBox">
-                    <label for="id">id</label>
+                    <p for="id">id</p>
                     <input type="text" id="id" placeholder="input your id">
                 </div>
                 <div class="inputBox">
-                    <label for="pw">password</label>
+                    <p for="pw">password</p>
                     <input type="password" id="password" placeholder="input your pw">
                 </div>
                 <p class="helperText"></p>
+            </div>
                 <button type="button" id="login">login</button>
                 <button type="button" id="gotoSignup">go to sign up</button>
+                
             </article>
         </section>
     </body>

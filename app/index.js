@@ -4,6 +4,7 @@ import { BoardItem, AnswerItem } from './components/boardItem.js';
 const searchButtons = document.querySelector('.searchButtons');
 const searchCheck = document.getElementById('searchCheck');
 const selectButtons = document.querySelector('.seclectButtons');
+const searchType = document.querySelector('.searchType');
 const requestBoardListType = {
     category : 'notice',
     sortMethod : 'boardCreatedAt'
@@ -64,7 +65,7 @@ async function newSetboards(){
 }
 
 async function setDisabledButton(){
-    secretTypeButton.disabled = true;
+    //secretTypeButton.disabled = true;
     sortTypebutton.recentSorter.click();
     searchTypeButton.all.click();
     boardCategory.noticeSelector.click();
@@ -86,6 +87,7 @@ function setupButtons(typeButton, listType, methodKey) {
                 }
                 await setSearchboard();
             }else {
+
                 listType[methodKey] = secretCheckBox.checked && selectedButtonName =='QnA' ? 'secretQnA':selectedButtonName;
                 secretCheckBox.checked = listType[methodKey] == 'secretQnA' ?  secretCheckBox.checked:false;
                 console.log(listType);
@@ -106,7 +108,7 @@ async function typeChoice(clickedButton, allButtons) {
         if (buttonName != 'notice'){
             await authCheck();
         }
-        secretQnABoardSelector.style.display = buttonName == 'QnA'?'block':'none'; 
+        secretQnABoardSelector.style.display = buttonName == 'QnA'?'flex':'none'; 
         sortTypebutton.recentSorter.click();
     }
     return buttonName;
@@ -197,8 +199,9 @@ async function setSearchboard(){
 
 const searchContent = document.querySelector('.searchInput');
 searchCheck.addEventListener("change", async() => {
+    searchType.style.display = searchCheck.checked?'flex':'none';
     selectButtons.disabled = searchCheck.checked ? true:false;
-    selectButtons.style.display = searchCheck.checked ? "none":"block";
+    selectButtons.style.display = searchCheck.checked ? "none":"flex";
     if (searchCheck.checked){
         await setSearchboard();
     } else{
@@ -230,6 +233,7 @@ function changeStatus(allButtons){
 
 function setShowButton(data){
     //console.log(data);
+    searchType.style.display = searchCheck.checked?'flex':'none';
     statusButton.login.style.display = data? 'none':'block';
     statusButton.signup.style.display = data? 'none':'block';
     statusButton.logout.style.display = data? 'block':'none';

@@ -37,7 +37,10 @@ console.log(myInfo.power);
 
 async function setupNoticeButton(){
     boardComponent.type = managerCheck ? 'free':'notice';
-    boardCategory.freeBoardSelector.disabled = managerCheck;
+    if(managerCheck){
+        boardCategory.freeBoardSelector.click();
+    }
+    
     boardCategory.noticeSelector.disabled = true;
 }
 
@@ -87,7 +90,7 @@ async function getBoardId(){
 //-----------------------------------게시글 유형 선택-------------------------------------------//
 
 setupButtons(boardCategory, boardComponent, 'type');
-secretTypeButton.disabled = true;
+//secretTypeButton.disabled = true;
 
 
 //------------------------------------게시글 작성 요청---------------------------------------//

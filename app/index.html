@@ -30,9 +30,9 @@
                     <button class="selectBoardButton" name="free" id="freeBoardSelector">자유게시판</button>
                     <button class="selectBoardButton" name="QnA" id="QnABoardSelector">QnA게시판</button>
                     <section class="secretQnABoardSelector">
-                        <button class="selectBoardButton" id="secretTypeButton">비밀글</button>
+                        <!-- <button class="selectBoardButton" id="secretTypeButton">비밀글</button> -->
                         <input class="selectBoardButton" type="checkbox" id="secretCheckBox">
-                        <label for="secretCheckBox"></label>
+                        <label for="secretCheckBox">비밀글</label>
                     </section>
                 </div>
                 <div class="selectSortButton">
@@ -42,6 +42,8 @@
                 </div>
             </section>
         </section>
+
+        
         <section class="searchButtons">
             <div class="searchType">
                 <button name="all" id="allSerchButton">전체게시판검색</button>
@@ -53,17 +55,17 @@
                     <button name="content" id="contentSearchButton">내용</button>
                     <button name="nickname" id="writerSearchButton">작성자</button>
                 </div>
-            </div>
-            <div>
                 <input type="text" class="searchInput" placeholder="What can I find for you?">
+            </div>
+            <div class="topLastBar">
                 <input type="checkbox" id="searchCheck">
                 <label for="searchCheck">검색</label>
-            </div>
-            
-         
+                <button id="writePost">게시글 작성</button>
+            </div> 
         </section>
+        
         <article>
-            <button id="writePost">게시글 작성</button>
+           
             <ol class="boardList">
 
             </ol>

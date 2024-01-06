@@ -1,0 +1,51 @@
+@import url('./index.css');
+h1{
+    display: flex;
+    justify-content: center;
+}
+article{
+    margin-top: 20px;
+    display: grid;
+    justify-content: center;
+}
+input{
+    width: 450px;
+    height: 30px;
+}
+.topBar{
+    justify-content: end;
+}
+.topBar a{
+    margin: 0%;
+}
+.loginBox{
+    display: grid;
+    border: 1px solid #0000001f;
+    padding: 8px;
+}
+.signupBox{
+    display: grid;
+    border: 1px solid #0000001f;
+    padding: 8px;
+}
+.signupBox input{
+    width: 98%;
+}
+.inputBox{
+    display: block;
+}
+@media screen and (max-width: 500px) {
+    article{
+        justify-content: normal;
+    }
+    input{
+        width: 98%;
+    }
+    .topBar{
+        align-items: stretch;
+        width: 100%;
+    }
+    .topBar > a{
+        width: 100%;
+    }
+}

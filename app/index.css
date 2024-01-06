@@ -1,6 +1,7 @@
 body{
     background-color: #dddddd;
     width: 100%;
+    margin: 0%;
 }
 div{
     display: flex;
@@ -15,11 +16,20 @@ button {
     outline: none;
     transition: background-color 0.3s ease;
 }
-
+label{
+    border: none;
+    color: #fff;
+    background-color: black;
+    padding: 10px 20px;
+    cursor: pointer;
+    outline: none;
+    transition: background-color 0.3s ease;
+}
 button:hover{
     color: black;
     background-color: #bbbbbb;
 }
+
 button:disabled{
     color: black;
     background-color: #bbbbbb;
@@ -30,6 +40,7 @@ a{
     padding: 10px 20px;
     cursor: pointer;
     outline: none;
+    text-decoration: none;
 }
 .select{
     background-color: black;
@@ -39,6 +50,7 @@ a{
     color: white;
     justify-content: space-between;
     align-items: center;
+    font-size: 12px;
 }
 .topBar button{
     background-color: black;
@@ -50,7 +62,6 @@ a{
     background-color: black;
     color: white;
     text-align: center;
-    text-decoration: none;
     margin-left: auto;
     border-bottom: 2px solid transparent;
     transition: border-bottom 0.4s ease;
@@ -80,9 +91,14 @@ a{
 .changeStatus {
     display: block;
 }
+.topLastBar{
+    background-color: black;
+    width: 100%;
+}
 .boardItem {
     border: 2px solid;
-    width: 90%;
+    width: 100%;
+    justify-content: space-between;
 }
 .boardList{
     padding-left: 0%;
@@ -90,49 +106,97 @@ a{
     height: 100%;
     display: flex;
     flex-direction: column;
-    row-gap: 15px;
     overflow-y: hidden;
+}
+
+.boardItem .title {
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 10%;
+    box-sizing: border-box; /* 상위 컨테이너의 크기에 padding과 border를 포함시킵니다. */
+    /* 다른 스타일 속성들도 추가할 수 있습니다. */
+
+}
+.boardItem .writer{
+    margin-right: 20px;
 }
 #secretCheckBox {
     appearance: none;
     display: none;
 }
+#secretCheckBox:checked + label{
+    color: black;
+    background-color: #bbbbbb;
+}
 
-#secretCheckBox:checked + label::before {
-    content: 'on'; /* 체크된 경우 "on"으로 변경 */
-    font-size: 16px;
-    margin-right: 4px;
-}
-#secretCheckBox + label::before {
-    content: 'off'; /* 기본적으로 "off"로 설정 */
-    font-size: 16px;
-    margin-right: 4px;
-}
-#secretCheckBox + label {
-    color: white;
+#secretCheckBox + label::after {
+    display: flex;
     cursor: pointer;
+    width: 100%;
+    justify-content: center;
+}
+
+#searchCheck {
+    appearance: none;
+    display: none;
+}
+#searchCheck:checked + label{
+    color: black;
+    background-color: #bbbbbb;
+}
+
+#searchCheck + label::after {
+    display: flex;
+    cursor: pointer;
+    width: 100%;
+    justify-content: center;
 }
 
 @media screen and (max-width: 500px) {
-    .selectSortButton{
-        align-items: stretch;
-        width: 100%
+    .boardItem{
+        font-size: 14px;
     }
-    .selectBoardButtons{
-        align-items: stretch;
-        width: 100%
+    .boardItem .date{
+        display: none;
     }
-    .secretQnABoardSelector{
+    .boardItem .title {
+
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 33%;
+        box-sizing: border-box; /* 상위 컨테이너의 크기에 padding과 border를 포함시킵니다. */
+        /* 다른 스타일 속성들도 추가할 수 있습니다. */
+    
+    }
+    #secretCheckBox + label {
+        display: flex;
+        cursor: pointer;
+        width: 100%;
         justify-content: center;
     }
-    .searchType {
-        flex-direction: column;
+    #secretCheckBox:checked + label:hover{
+        color: black;
+        background-color: #bbbbbb;
+    }
+    
+    .selectSortButton, .topLastBar, .DetailSearch{
+        align-items: stretch;
+        width: 100%
+    }
+    .selectBoardButtons, .searchType{
         align-items: stretch;
         width: 100%;
-    }
-    .DetailSearch{
         flex-direction: column;
-        align-items: stretch;
+    }
+    .topLastBar > label {
+        display: flex;
+        width: 50%;
+        justify-content: center;
+    }
+    .DetailSearch > button {
         width: 100%;
     }
     .searchType > button {
@@ -145,6 +209,6 @@ a{
         width: 100%;
     }
     #writePost{
-        width: 100%;
+        width: 50%;
     }
 }
