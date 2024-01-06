@@ -39,7 +39,7 @@ button:disabled{
 }
 a{
     border: none;
-    color: #fff;
+    color: black;
     padding: 10px 20px;
     cursor: pointer;
     outline: none;
@@ -99,17 +99,29 @@ a{
     width: 100%;
 }
 .boardItem {
-    border: 2px solid;
-    width: 100%;
     justify-content: space-between;
 }
-.boardList{
+.boardItem .views, .recommends, .date{
+    margin-top: 0;
+    margin-bottom: auto;
+    border: 1px solid;
+    border-radius: 4px;
+}
+ol{
     padding-left: 0%;
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
     overflow-y: hidden;
+}
+.boardList a{
+    
+    color: black;
+    border: 2px solid;
+    border-radius: 4px;
+    justify-content: space-between;
+    margin-bottom: 10px;
 }
 
 .boardItem .title {
@@ -124,6 +136,9 @@ a{
 }
 .boardItem .writer{
     margin-right: 20px;
+}
+.writerInfo{
+    justify-content: end;
 }
 #secretCheckBox {
     appearance: none;

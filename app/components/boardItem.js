@@ -34,15 +34,19 @@ export const BoardItem = (id, date, title, views, recommeds, writerNickname, boa
             <div class="boardItem">
                 <h2 class="title">${title}</h2>
                 
-                <div class="writerInfo">
-                    <h2 class="writer">${writerNickname}</h2>
-                </div>
                 <div class="info">
+                    <h3 class="date">${dateTimeStr}</h3>
                     <h3 class="views">조회수 <b>${views}</b></h3>
-                    <h3 class="commends">추천수 <b>${recommeds}</b></h3>
-                    <p class="date">${dateTimeStr}</p>
+                    <h3 class="recommends">추천수 <b>${recommeds}</b></h3>
+                    
+                    
                 </div>
+                
             </div>
+            
+            <div class="writerInfo">
+            <h2 class="writer">🧑${writerNickname}</h2>
+        </div>
         </a>
     `;
     } else{
@@ -51,14 +55,18 @@ export const BoardItem = (id, date, title, views, recommeds, writerNickname, boa
             <div class="boardItem">
                 <h2 class="title">${title}</h2>
                 
-                <div class="writerInfo">
-                    <h2 class="writer">${writerNickname}</h2>
-                </div>
                 <div class="info">
+                    <h3 class="date">${dateTimeStr}</h3>
                     <h3 class="views">조회수 <b>${views}</b></h3>
-                    <p class="date">${dateTimeStr}</p>
+                    
+                        
                 </div>
+                
             </div>
+            
+            <div class="writerInfo">
+            <h2 class="writer">🧑${writerNickname}</h2>
+        </div>
             <ol id="answer${id}">
             </ol>
         </a>
@@ -95,18 +103,19 @@ export const AnswerItem = (id, date, title, views, writerNickname, boardType,  u
         `;
     } else{
         return `
-        <a href="/board.html?id=${id}">
+        <a class = "answer" href="/board.html?id=${id}">
             <div class="boardItem">
                 <h2 class="title">${title}</h2>
-                <div class="writerInfo">
-                    <h2 class="writer">${writerNickname}</h2>
-                </div>
                 <div class="info">
-                    <h3 class="views">조회수 <b>${views}</b></h3>
-                    <p class="date">${dateTimeStr}</p>
+                <h3 class="date">${dateTimeStr}</h3>
+                    <h3 class="views">조회수 <b>${views}</b></h3>                  
                 </div>
                 
             </div>
+            
+            <div class="writerInfo">
+            <h2 class="writer">🧑${writerNickname}</h2>
+        </div>
         </a>
     `;  
     }
