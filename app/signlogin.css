@@ -1,5 +1,6 @@
 @import url('./index.css');
 h1{
+    margin: 0;
     display: flex;
     justify-content: center;
 }
@@ -11,6 +12,14 @@ article{
 input{
     width: 450px;
     height: 30px;
+}
+label{
+    color: black;
+    background-color: #dddddd;
+    padding: 5px;
+}
+.topBarBackground{
+    background-color: black;
 }
 .topBar{
     justify-content: end;
