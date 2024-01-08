@@ -1,12 +1,25 @@
+@import url('./utils/animation.css');
+html{
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 body{
+    display: flex;
     background-color: #dddddd;
     width: 100%;
     margin: 0%;
+    
+    align-items: center;
+    justify-content: center;
+}
+section{
+    width: 100%;
 }
 div{
     display: flex;
 }
-
 button {
     border: none;
     color: #fff;
@@ -45,15 +58,26 @@ a{
     outline: none;
     text-decoration: none;
 }
+ol{
+    padding-left: 0%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: hidden;
+}
+h1{
+    margin-left: 30px;
+}
 .select{
     background-color: black;
 }
 .topBar{
+    height: 0;
     background-color: black;
     color: white;
     justify-content: space-between;
     align-items: center;
     font-size: 12px;
+    animation: fadeIn ease-in-out 2s forwards;
 }
 .topBar button{
     background-color: black;
@@ -78,10 +102,13 @@ a{
 }
 
 .seclectButtons{
+    height: 0;
+    opacity: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
+    animation: fadeIn 2s ease-in-out 2s forwards;
 }
 .secretQnABoardSelector{
     display: flex;
@@ -95,8 +122,11 @@ a{
     display: block;
 }
 .topLastBar{
+    height: 0;
+    opacity: 0;
     background-color: black;
     width: 100%;
+    animation: fadeIn 1s ease-in-out 2s forwards;
 }
 .boardItem {
     justify-content: space-between;
@@ -107,20 +137,19 @@ a{
     border: 1px solid;
     border-radius: 4px;
 }
-ol{
-    padding-left: 0%;
-    width: 100%;
-    height: 100%;
+
+.boardList{
+    list-style-type: none;
     display: flex;
-    flex-direction: column;
-    overflow-y: hidden;
+    list-style-type: none;
+    padding: 0;
+    align-items: center;
 }
 .boardList a{
-    
+    opacity: 0;
     color: black;
     border: 2px solid;
     border-radius: 4px;
-    justify-content: space-between;
     margin-bottom: 10px;
 }
 
@@ -202,7 +231,7 @@ ol{
     
     .selectSortButton, .topLastBar, .DetailSearch{
         align-items: stretch;
-        width: 100%
+        width: 100%;
     }
     .selectBoardButtons, .searchType{
         align-items: stretch;

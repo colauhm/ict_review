@@ -49,7 +49,6 @@ const statusButton = {
 }
 
 const secretQnABoardSelector = document.querySelector('.secretQnABoardSelector');
-const secretTypeButton = document.getElementById('secretTypeButton');
 const secretCheckBox = document.getElementById('secretCheckBox');
 
 const myInfo = await checkInfo(requestBoardListType.category);
@@ -161,11 +160,18 @@ const setBoardItem = async (boardData) => {
         boardList.innerHTML = boardData
             .map((data) => {
                 if(!data.answer){
+
                     return BoardItem(data.boardId, data.boardCreatedAt, data.boardTitle, data.boardViewCount, data.boardRecommendCount, data.userNickname, data.boardType, myInfo.power, myInfo.nickname);
                 }
             })
             .join('');
     }
+      // 모든 a 태그에 이벤트 리스너 등록
+    const links = document.querySelectorAll('.boardLink');
+        links.forEach(function(link) {
+        link.addEventListener('click', handlePageTransition);
+    });
+    
 };
 
 function setAnswerItem(boardData, id) {
@@ -243,8 +249,40 @@ function setShowButton(data){
     document.querySelector('.changeStatus').style.display = 'flex';
 }
 
+function handlePageTransition(event) {
+    event.preventDefault();
+    
+    const targetPage = event.target.closest('a');
+    targetPage.style.opacity = 1;
+    targetPage.classList.remove('fade-in-animation');
+    // 현재 페이지에 애니메이션 클래스 추가
+    targetPage.classList.add('fade-out-animation');
+  
+    // // // // 애니메이션이 완료되면 페이지 이동
+    targetPage.addEventListener('animationend', function() {
+        targetPage.classList.remove('fade-out-animation');
+        targetPage.classList.add('fade-in-animation');
+    window.location.href = targetPage;
+   }, { once: true });
+}
+function applySequentialAnimation() {
+    const boardListItems = document.querySelector('.boardList');
+    const listItems = boardListItems.querySelectorAll('a');
+    listItems.forEach(function (item, index) {
+    setTimeout(function () {
+        console.log(item);
+        item.classList.add('fade-in-animation');
+        console.log(index)
+    }, index * 500); // 각 항목마다 0.5초 간격으로 순차 적용
+    });
+}
 
 setBoardItem(boardList);
 changeStatus(statusButton);
 setShowButton(myInfo);
 await setDisabledButton();
+
+
+setTimeout(() => {
+    applySequentialAnimation();
+}, 3000);

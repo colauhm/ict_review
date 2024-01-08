@@ -1,6 +1,7 @@
 export const BoardItem = (id, date, title, views, recommeds, writerNickname, boardType,  userPower, userNickname) => {
     // 파라미터 값이 없으면 리턴
     // 날짜 포맷 변경 YYYY-MM-DD hh:mm:ss
+
     const checkPower = userPower ? true: false;
     const dateObj = new Date(date);
     const year = dateObj.getFullYear();
@@ -30,43 +31,33 @@ export const BoardItem = (id, date, title, views, recommeds, writerNickname, boa
     }
     if (boardType == 'free'){
         return `
-        <a href="/board.html?id=${id}">
+        <a href="/board.html?id=${id}" class="boardLink">
             <div class="boardItem">
                 <h2 class="title">${title}</h2>
-                
                 <div class="info">
                     <h3 class="date">${dateTimeStr}</h3>
                     <h3 class="views">조회수 <b>${views}</b></h3>
                     <h3 class="recommends">추천수 <b>${recommeds}</b></h3>
-                    
-                    
                 </div>
-                
             </div>
-            
             <div class="writerInfo">
             <h2 class="writer">🧑${writerNickname}</h2>
-        </div>
+            </div>
         </a>
     `;
     } else{
         return `
-        <a href="/board.html?id=${id}">
+        <a href="/board.html?id=${id}" class="boardLink">
             <div class="boardItem">
-                <h2 class="title">${title}</h2>
-                
+                <h2 class="title">${title}</h2>              
                 <div class="info">
                     <h3 class="date">${dateTimeStr}</h3>
                     <h3 class="views">조회수 <b>${views}</b></h3>
-                    
-                        
-                </div>
-                
+                </div>   
             </div>
-            
             <div class="writerInfo">
             <h2 class="writer">🧑${writerNickname}</h2>
-        </div>
+            </div>
             <ol id="answer${id}">
             </ol>
         </a>
@@ -103,19 +94,17 @@ export const AnswerItem = (id, date, title, views, writerNickname, boardType,  u
         `;
     } else{
         return `
-        <a class = "answer" href="/board.html?id=${id}">
+        <a class = "answer" href="/board.html?id=${id}" class="boardLink">
             <div class="boardItem">
                 <h2 class="title">${title}</h2>
                 <div class="info">
                 <h3 class="date">${dateTimeStr}</h3>
                     <h3 class="views">조회수 <b>${views}</b></h3>                  
                 </div>
-                
             </div>
-            
             <div class="writerInfo">
             <h2 class="writer">🧑${writerNickname}</h2>
-        </div>
+            </div>
         </a>
     `;  
     }

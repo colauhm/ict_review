@@ -1,4 +1,7 @@
 @import url('./index.css');
+a{
+    justify-content: center;
+}
 h2 {
     display: flex;
 }
@@ -61,6 +64,9 @@ ol{
     padding: 5px 5px;
 }
 @media screen and (max-width: 500px){
+    section{
+        justify-content:normal;
+    }
     h2{
         font-size: 14px;
     }

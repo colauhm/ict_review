@@ -11,66 +11,56 @@
         <title>main</title>
     </head>
     <body>
-        <section class="select">
-
-        
-            <div class="topBar">
-                <h1>main page</h1>
-                <a href="/fetch.html">패치노트</a>
-                <div class="changeStatus">
-                    <button id="login">로그인</button>
-                    <button id="signup">회원가입</button>
-                    <button id="logout">로그아웃</button>
+        <section class="current-page">
+            <section class="select">        
+                <div class="topBar">
+                    <h1>main page</h1>
+                    <a href="/fetch.html">패치노트</a>
+                    <div class="changeStatus">
+                        <button id="login">로그인</button>
+                        <button id="signup">회원가입</button>
+                        <button id="logout">로그아웃</button>
+                    </div>
+                </div>            
+                <section class="seclectButtons">
+                    <div class="selectBoardButtons">
+                        <button class="selectBoardButton" name="notice" id="noticeSelector">공지사항</button>
+                        <button class="selectBoardButton" name="free" id="freeBoardSelector">자유게시판</button>
+                        <button class="selectBoardButton" name="QnA" id="QnABoardSelector">QnA게시판</button>
+                        <section class="secretQnABoardSelector">
+                            <!-- <button class="selectBoardButton" id="secretTypeButton">비밀글</button> -->
+                            <input class="selectBoardButton" type="checkbox" id="secretCheckBox">
+                            <label for="secretCheckBox">비밀글</label>
+                        </section>
+                    </div>
+                    <div class="selectSortButton">
+                        <button name="boardCreatedAt" id="recentSorter">최신</button>
+                        <button name="boardViewCount" id="viewSorter">조회수</button>
+                        <button name="boardRecommendCount" id="recommendSorter">추천</button>
+                    </div>
+                </section>
+            </section>      
+            <section class="searchButtons">
+                <div class="searchType">
+                    <button name="all" id="allSerchButton">전체게시판검색</button>
+                    <button name="notice" id="noticeSearchButton">공지사항</button>
+                    <button name="free" id="freeBoardSearchButton">자유게시판</button>
+                    <button name="QnA" id="QnABoardSearchButton">QnA게시판</button>
+                    <div class="DetailSearch">
+                        <button name="title" id="titleSearchButton">제목</button>
+                        <button name="content" id="contentSearchButton">내용</button>
+                        <button name="nickname" id="writerSearchButton">작성자</button>
+                    </div>
+                    <input type="text" class="searchInput" placeholder="What can I find for you?">
                 </div>
-            </div>
-            
-            <section class="seclectButtons">
-                <div class="selectBoardButtons">
-                    <button class="selectBoardButton" name="notice" id="noticeSelector">공지사항</button>
-                    <button class="selectBoardButton" name="free" id="freeBoardSelector">자유게시판</button>
-                    <button class="selectBoardButton" name="QnA" id="QnABoardSelector">QnA게시판</button>
-                    <section class="secretQnABoardSelector">
-                        <!-- <button class="selectBoardButton" id="secretTypeButton">비밀글</button> -->
-                        <input class="selectBoardButton" type="checkbox" id="secretCheckBox">
-                        <label for="secretCheckBox">비밀글</label>
-                    </section>
-                </div>
-                <div class="selectSortButton">
-                    <button name="boardCreatedAt" id="recentSorter">최신</button>
-                    <button name="boardViewCount" id="viewSorter">조회수</button>
-                    <button name="boardRecommendCount" id="recommendSorter">추천</button>
-                </div>
-            </section>
+                <div class="topLastBar">
+                    <input type="checkbox" id="searchCheck">
+                    <label for="searchCheck">검색</label>
+                    <button id="writePost">게시글 작성</button>
+                </div> 
+            </section>   
+            <ol class="boardList"></ol>
         </section>
-
-        
-        <section class="searchButtons">
-            <div class="searchType">
-                <button name="all" id="allSerchButton">전체게시판검색</button>
-                <button name="notice" id="noticeSearchButton">공지사항</button>
-                <button name="free" id="freeBoardSearchButton">자유게시판</button>
-                <button name="QnA" id="QnABoardSearchButton">QnA게시판</button>
-                <div class="DetailSearch">
-                    <button name="title" id="titleSearchButton">제목</button>
-                    <button name="content" id="contentSearchButton">내용</button>
-                    <button name="nickname" id="writerSearchButton">작성자</button>
-                </div>
-                <input type="text" class="searchInput" placeholder="What can I find for you?">
-            </div>
-            <div class="topLastBar">
-                <input type="checkbox" id="searchCheck">
-                <label for="searchCheck">검색</label>
-                <button id="writePost">게시글 작성</button>
-            </div> 
-        </section>
-        
-        <article>
-           
-            <ol class="boardList">
-
-            </ol>
-        </article>
-    </body>
-    <script src="./index.js" type="module"></script>
-        
+        <script src="./index.js" type="module"></script>
+    </body>    
 </html>

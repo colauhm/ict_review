@@ -1,64 +1,58 @@
 <!DOCTYPE html>
 <html lang="kr">
-
-<head>
-    <meta name="view-transition" content="same-origin"/>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link 
-        rel="stylesheet" 
-        href="./board.css" 
-        crossorigin="anonymous" />
-    <title></title>
-</head>
-
-<body>
-    <section>
-        <div class="contentBox">
-            
-            <div class="topInfo">
-                <h2 id="title">제목</h1>
-                <h2 id="writerNickname">닉네임 </h2>
-                <h2 id="createdAt">생성일</h3>
+    <head>
+        <meta name="view-transition" content="same-origin"/>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link 
+            rel="stylesheet" 
+            href="./board.css" 
+            crossorigin="anonymous" />
+        <title></title>
+    </head>
+    <body>
+        <section class="next-page">
+            <div class="topBar">
+                <a href="/">main page</a>
             </div>
-            
-            <div class="count">
-                <h2 class="viewCount">조회수<h2 id="viewCountData"></h2></h2>
-                <h2 class="recommendCount">추천수<h2 id="recommendCountData"></h2></h2>
-                <h2 class="commentCount">댓글수<h2 id="commentCountData"></h2></h2>
+            <div class="contentBox">
+                <div class="topInfo">
+                    <h2 id="title">제목</h1>
+                    <h2 id="writerNickname">닉네임 </h2>
+                    <h2 id="createdAt">생성일</h3>
+                </div>
+                <div class="count">
+                    <h2 class="viewCount">조회수<h2 id="viewCountData"></h2></h2>
+                    <h2 class="recommendCount">추천수<h2 id="recommendCountData"></h2></h2>
+                    <h2 class="commentCount">댓글수<h2 id="commentCountData"></h2></h2>
+                </div>
+                <div class="recommend">
+                    <input type="checkbox" id="recommendCheckBox">
+                    <label for="recommendCheckBox">추천</label>
+                </div> 
+                <div class="boardChangeButtons">
+                    <button id="editButton">수정</button>
+                    <button id="deleteButton">삭제</button>
+                    <button id="QnAAnswer">답글</button>
+                </div>
+                <div class="content">
+                    <h2 id="content"></h2>
+                </div>
+                <div class="download">
+                    <div class="fileDownloadLink"></div>  
+                </div>
+                <section class="writeComment">
+                    <textarea placeholder="댓글을 작성해주세요!" id="comment"></textarea>
+                    <button id="addComment">댓글 작성</button>
+                </section>
+                <section>
+                    <ol class="answerList">
+                    </ol>
+                    <ol class="commentList">
+                    </ol>
+                </section>
             </div>
-            
-            <div class="recommend">
-                <input type="checkbox" id="recommendCheckBox">
-                <label for="recommendCheckBox">추천</label>
-            </div> 
-            <div class="boardChangeButtons">
-                <button id="editButton">수정</button>
-                <button id="deleteButton">삭제</button>
-                <button id="QnAAnswer">답글</button>
-            </div>
-            <div class="content">
-                <h2 id="content"></h2>
-            </div>
-            
-            <div class="download">
-                <div class="fileDownloadLink"></div>  
-            </div>
-        
-        <section class="writeComment">
-            <textarea placeholder="댓글을 작성해주세요!" id="comment"></textarea>
-            <button id="addComment">댓글 작성</button>
         </section>
-
-        <section>
-            <ol class="answerList">
-            </ol>
-            <ol class="commentList">
-            </ol>
-        </section>
-    </div>
-</section>
-    <script src="./board.js" type="module"></script>
-</body>
-
+        <script src="./board.js" type="module"></script>
+    </body>
 </html>
