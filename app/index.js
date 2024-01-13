@@ -1,6 +1,6 @@
 import { checkInfo, authCheck, ServerUrl, deleteCookie } from './utils/function.js';
 import { BoardItem, AnswerItem } from './components/boardItem.js';
-
+import { setupWebSocket } from './utils/websocket.js';
 const searchButtons = document.querySelector('.searchButtons');
 const searchCheck = document.getElementById('searchCheck');
 const selectButtons = document.querySelector('.seclectButtons');
@@ -286,3 +286,4 @@ await setDisabledButton();
 setTimeout(() => {
     applySequentialAnimation();
 }, 3000);
+setupWebSocket();
