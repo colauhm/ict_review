@@ -12,6 +12,12 @@ section{
 ol{
     padding-left: 0;
 }
+.topBack{
+    background-color: black;
+}
+.topBar{
+    animation: appTopBarFadeInBoard 2s ease forwards;
+}
 .recommend{
     justify-content: end;
 }

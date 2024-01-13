@@ -16,20 +16,52 @@
         opacity: 1;
     }
 }
-@keyframes appFadeIn{
+@keyframes selectClassFadeIn{
     0% { 
         height: 0;
-        width: 100%; 
         opacity: 0;
     }
-    30%{
-        height: 40px;
+    50%{
+        height: 25%;
+    }
+    100% { 
+        height: 25%;
+        opacity: 1;
+    }
+}
+@keyframes appTopBarFadeIn{
+    0% { 
+        height: 0;
+        opacity: 0;
+    }
+    100% { 
+        height: 34%;
+        opacity: 1;
+    }
+}
+@keyframes appTopBarFadeInBoard{
+    0% { 
+        height: 0;
+        opacity: 0;
     }
     100% { 
         height: 100%;
-        width: 100%;
         opacity: 1;
     }
+}
+@keyframes appSelectButtonsFadeIn{
+    0% { 
+        height: 0;
+        opacity: 0;
+        width: 70%; 
+    }
+
+    100%{
+        height: 66%;
+        opacity: 1;
+        width: 100%;
+    }
+    
 }
 @keyframes boardItem{
     0% { 

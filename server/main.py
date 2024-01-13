@@ -1,9 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routers import user, board, comment
+from .routers import user, board, comment, websocket
 from .database import fileload
+from starlette.middleware.trustedhost import TrustedHostMiddleware
 app = FastAPI()
-
+app.add_middleware(TrustedHostMiddleware, allowed_hosts=["*"])
 app.add_middleware(
     CORSMiddleware,
 		allow_origins='*',  # 모든 오리진(도메인)에서의 요청을 허용합니다. 실제 운영 환경에서는 '*' 대신 특정 도메인을 지정하는 것이 보안상 좋습니다.
@@ -16,3 +17,5 @@ app.include_router(board.router)
 app.include_router(user.router)
 app.include_router(comment.router)
 app.include_router(fileload.router)
+
+app.include_router(websocket.router)
