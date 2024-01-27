@@ -65,6 +65,9 @@ ol{
 h1{
     margin-left: 30px;
 }
+li{
+    width: 90px;
+}
 .select{
     width: 100%;
     background-color: black;
