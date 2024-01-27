@@ -8,26 +8,29 @@ export function  setupWebSocket(userNickname) {
         console.log("WebSocket connection opened:", event);
     };
     socket.onmessage = async (event) => {
+         visitorList.innerHTML = "";
         console.log("Message received:", event.data);
         if(event.data.includes("인원수")){
             messageContainer.innerHTML = "현재 온라인 " + event.data;
         }
         else{
-            visitorList.innerHTML = "";
+           
             const visitor = await getVisitor();
             visitor.forEach(async item => {
                 const visitorName = item.visitorName
                 const liElement = document.createElement('li');
                 const visitTime = item.visitTime;
                 const quitTime = item.quitTime;
-                liElement.innerHTML = visitorName;
+                
                 console.log(await visitQuitDifference(visitTime, quitTime));
                 if (!visitorName.includes("방문자")){
                     if (await visitQuitDifference(visitTime, quitTime) > 0){
-                        liElement.innerHTML += await formatTimeDifference(item.visitTime);
+                        liElement.innerHTML = '🔵' + visitorName + ' : ' + await formatTimeDifference(item.visitTime);
                     }else{
-                        liElement.innerHTML += await formatTimeDifference(item.quitTime) + "방문";
+                        liElement.innerHTML = '⚫' + visitorName + ' : ' + await formatTimeDifference(item.quitTime);
                     }
+                }else{
+                      liElement.innerHTML = visitorName;
                 }
                 visitorList.appendChild(liElement);
             
@@ -57,15 +60,17 @@ async function formatTimeDifference(targetTime) {
     const timeDifference = currentDate - targetDate;
 
     // 차이를 분 단위로 변환
-    const minutesDifference = Math.floor(timeDifference / (1000 * 60));
+    const minutesDifference = Math.floor(timeDifference / (1000 * 60)) - 540;
 
     // 분 단위를 시간과 분으로 나누기
-    const hours = Math.floor(minutesDifference / 60);
+    console.log(minutesDifference);
+    
+    const hours = Math.floor(minutesDifference/ 60);
     const minutes = minutesDifference % 60;
 
     // 결과 문자열 생성
     let result = '';
-
+    
     if (hours > 0) {
         result += hours + '시간';
     }
