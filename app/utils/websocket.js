@@ -11,7 +11,7 @@ export function  setupWebSocket(userNickname) {
          visitorList.innerHTML = "";
         console.log("Message received:", event.data);
         if(event.data.includes("인원수")){
-            messageContainer.innerHTML = "현재 온라인 " + event.data;
+            messageContainer.innerHTML = "메인 " + event.data;
         }
         else{
            
@@ -60,7 +60,7 @@ async function formatTimeDifference(targetTime) {
     const timeDifference = currentDate - targetDate;
 
     // 차이를 분 단위로 변환
-    const minutesDifference = Math.floor(timeDifference / (1000 * 60)) - 540;
+    const minutesDifference = Math.floor(timeDifference / (1000 * 60));
 
     // 분 단위를 시간과 분으로 나누기
     console.log(minutesDifference);

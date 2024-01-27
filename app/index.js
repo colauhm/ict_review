@@ -223,7 +223,9 @@ searchCheck.addEventListener("change", async() => {
     } else{
         await newSetboards();
     }
-    
+    setTimeout(() => {
+        applySequentialAnimation();
+    }, 500); 
 });
 
 searchContent.addEventListener("input", async() => {

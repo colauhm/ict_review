@@ -66,7 +66,6 @@ h1{
     margin-left: 30px;
 }
 li{
-    width: 90px;
 }
 .select{
     width: 100%;
@@ -83,7 +82,7 @@ li{
     justify-content: space-between;
     align-items: center;
     font-size: 11px;
-    animation: fadeIn ease-in-out 2s forwards;
+    animation: fadeIn ease-in-out 0.5s forwards;
 }
 .topBar button{
     background-color: black;
@@ -114,10 +113,10 @@ li{
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    animation: fadeIn 2s ease-in-out 2s forwards;
+    animation: fadeIn 1s ease-in-out 1s forwards;
 }
 .secretQnABoardSelector{
-    display: flex;
+    display: none;
 }
 .searchButtons{
     display: flex;
@@ -133,6 +132,10 @@ li{
     background-color: black;
     width: 100%;
     animation: fadeIn 1s ease-in-out 2s forwards;
+}
+#messageContainer{
+    color: white;
+    padding-top: 5%;
 }
 .boardItem {
     justify-content: space-between;
@@ -195,6 +198,9 @@ li{
     background-color: #bbbbbb;
 }
 #visitorCheck{
+    display: none;
+}
+.searchType{
     display: none;
 }
 #searchCheck {
@@ -266,15 +272,25 @@ li{
         align-items: stretch;
         width: 100%;
     }
+    .topLastBar{
+        flex-direction: column;    
+        justify-content: center;
+        animation:appSelectButtonsFadeIn  2s ease-in-out forwards 3s;
+    }
+    .socket{
+        justify-content: center;
+    }
+    #messageContainer{
+        padding-top: 2.5%;
+    }
     .selectBoardButtons, .searchType{
         align-items: center;
         width: 100%;
         flex-direction: column;
     }
-    .topLastBar > label {
-        display: flex;
-        width: 50%;
-        justify-content: center;
+    .topLastBar > label{
+        width: 100%;
+        padding-left: 45%;
     }
     .DetailSearch > button {
         width: 100%;
@@ -289,6 +305,6 @@ li{
         width: 100%;
     }
     #writePost{
-        width: 50%;
+        width: 100%;
     }
 }
