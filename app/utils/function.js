@@ -68,7 +68,7 @@ export const prependChild = (parent, child) => {
 };
 
 export const ServerUrl = () => {
-    return 'https://server-8088.run.goorm.io/api';
+    return 'http://localhost:8088/api';
 };
 
 export const getUrlId = () => {

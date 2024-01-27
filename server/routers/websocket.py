@@ -11,7 +11,7 @@ websockets = {}
 
 @router.get("/visitor")
 async def getVisitor():
-    visitor = await execute_sql_query("SELECT visitorName FROM visitor")
+    visitor = await execute_sql_query("SELECT * FROM visitor")
     return visitor
 @router.websocket("/ws/{userNickname}")
 async def websocket_endpoint(websocket: WebSocket, userNickname: Optional[str]):

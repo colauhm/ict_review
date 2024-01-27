@@ -79,7 +79,9 @@ function setupButtons(typeButton, listType, methodKey) {
     Object.values(typeButton).forEach(button => {
         button.addEventListener('click', async () => {
             const selectedButtonName = await typeChoice(button, typeButton);
-            
+            setTimeout(() => {
+                applySequentialAnimation();
+            }, 500);
             console.log(selectedButtonName, searchCheck.checked);
             if(searchCheck.checked){
                 if (typeButton == searchDetailTypebutton){
@@ -124,6 +126,9 @@ document.getElementById('writePost').addEventListener('click', function (){
 })
 
 secretCheckBox.addEventListener('click', async () => {
+    setTimeout(() => {
+        applySequentialAnimation();
+    }, 500);   
     requestBoardListType.category = secretCheckBox.checked ? 'secretQnA':'QnA';
     await newSetboards();
 });
@@ -171,7 +176,7 @@ const setBoardItem = async (boardData) => {
             .join('');
     }
       // 모든 a 태그에 이벤트 리스너 등록
-    const links = document.querySelectorAll('.boardLink');
+    let links = document.querySelectorAll('.boardLink');
         links.forEach(function(link) {
         link.addEventListener('click', handlePageTransition);
     });
@@ -209,6 +214,7 @@ async function setSearchboard(){
 
 const searchContent = document.querySelector('.searchInput');
 searchCheck.addEventListener("change", async() => {
+    
     searchType.style.display = searchCheck.checked?'flex':'none';
     selectButtons.disabled = searchCheck.checked ? true:false;
     selectButtons.style.display = searchCheck.checked ? "none":"flex";
@@ -217,11 +223,15 @@ searchCheck.addEventListener("change", async() => {
     } else{
         await newSetboards();
     }
+    
 });
 
 searchContent.addEventListener("input", async() => {
     if (searchCheck.checked){
         await setSearchboard();
+        setTimeout(() => {
+            applySequentialAnimation();
+        }, 50);
     }
 });
 
@@ -289,7 +299,7 @@ function applySequentialAnimation() {
         console.log(item);
         item.classList.add('fade-in-animation');
         console.log(index)
-    }, index * 500); // 각 항목마다 0.5초 간격으로 순차 적용
+    }, index * 50); // 각 항목마다 0.5초 간격으로 순차 적용
     });
 }
 
