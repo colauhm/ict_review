@@ -187,7 +187,13 @@ h1{
     width: 100%;
     justify-content: center;
 }
-
+#visitorCheck:checked + label{
+    color: black;
+    background-color: #bbbbbb;
+}
+#visitorCheck{
+    display: none;
+}
 #searchCheck {
     appearance: none;
     display: none;
@@ -202,6 +208,11 @@ h1{
     cursor: pointer;
     width: 100%;
     justify-content: center;
+}
+#visitorList{
+    background-color: #bbbbbb;
+    border: 1px solid;
+    position: fixed;
 }
 @media screen and (max-width: 500px) {
     .select{

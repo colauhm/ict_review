@@ -5,6 +5,9 @@ const searchButtons = document.querySelector('.searchButtons');
 const searchCheck = document.getElementById('searchCheck');
 const selectButtons = document.querySelector('.seclectButtons');
 const searchType = document.querySelector('.searchType');
+const visitorCheckBox = document.getElementById("visitorCheck");
+const visitorList = document.getElementById("visitorList");
+
 const requestBoardListType = {
     category : 'notice',
     sortMethod : 'boardCreatedAt'
@@ -52,8 +55,9 @@ const secretQnABoardSelector = document.querySelector('.secretQnABoardSelector')
 const secretCheckBox = document.getElementById('secretCheckBox');
 
 const myInfo = await checkInfo(requestBoardListType.category);
+const userNickname = myInfo.nickname ? myInfo.nickname : 'visit'
 const boardList = await boardListLoad();
-console.log(boardList);
+console.log(myInfo.nickname);
 //--------------------버튼 선택시 다른 버튼은 선택버튼 활성화 나머지버튼 활성화 기능-----------//
 
 async function newSetboards(){
@@ -236,7 +240,19 @@ function changeStatus(allButtons){
         });
     });
 }
-
+function visitorListShowCheck(){
+    visitorList.style.display = "none";
+    visitorCheckBox.addEventListener("change" ,() => {
+        console.log(visitorCheckBox.checked)
+        if(visitorCheckBox.checked){
+            visitorList.style.display = "block";
+        } else{
+            visitorList.style.display = "none";
+        }
+    });
+    
+    
+}
 function setShowButton(data){
     //console.log(data);
     searchType.style.display = searchCheck.checked?'flex':'none';
@@ -282,8 +298,8 @@ changeStatus(statusButton);
 setShowButton(myInfo);
 await setDisabledButton();
 
-
+visitorListShowCheck();
 setTimeout(() => {
     applySequentialAnimation();
 }, 3000);
-setupWebSocket();
+setupWebSocket(userNickname);
